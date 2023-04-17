@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="it-IT">
+    <head>
+        <title>Wanderlust</title>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <script type="text/javascript" src="./jquery-3.6.4.min.js"></script>
+        <!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> jQuery CDN, errore 'browser is not defined' nella console JavaScript -->
+        <!--<script type="text/javascript" src="./bootstrap/js/bootstrap.bundle.min.js"></script> Per dropdown, altrimenti va bene bootstrap.min.js -->
+        <script type="text/javascript" src="./bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="./script.js"></script>
+        <link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="./style.css"/>
+    </head>
+    <body>
+        <div class="top-menu">
+            <nav class="navbar">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="./index.html">
+                        <h3 id="title">Wanderlust</h3>
+                    </a>
+
+                    <div class="user-buttons">
+                        <input type="button" class="btn" value="Registrati" id="signup-button">
+                        <input type="button" class="btn" value="Accedi" id="login-button">
+                    </div>
+
+                    <!--<div id="user-pic">
+                        <img src="./imgs/montagna.jpg" alt="" class="rounded-circle" width="40" height="40">
+                    </div>-->
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul>
+                            <li>
+                                <input type="button" class="btn" value="Registrati" id="signup-button" onclick="toggleSignupForm()">
+                                <input type="button" class="btn" value="Accedi" id="login-button" onclick="toggleLoginForm()">
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!--<div class="signup-form-container">
+                        <form action="" method="post" id="signup-form">
+                            <h1 style="color: #9e44f3; font-weight: 800;">Registrazione</h1>
+    
+                            <label for="username" style="float: left;">Username</label>
+                            <input type="text" placeholder="Username" name="username" autofocus required>
+
+                            <label for="email" style="float: left;">Email</label>
+                            <input type="text" placeholder="Enter Email" name="email" required>
+    
+                            <label for="psw" style="float: left;">Password</label>
+                            <input type="password" placeholder="Enter Password" name="psw" required>
+    
+                            <input type="submit" class="btn btn-lg" value="Submit" id="submit-signup-button">
+                        </form>
+                    </div>
+
+                    <div class="login-form-container">
+                        <form action="" method="post" id="login-form">
+                            <h1 style="color: #ff9102; font-weight: 800;">Accesso</h1>
+        
+                            <label for="email" style="float: left;">Email</label>
+                            <input type="text" placeholder="Enter Email" name="email" autofocus required>
+        
+                            <label for="psw" style="float: left;">Password</label>
+                            <input type="password" placeholder="Enter Password" name="psw" required>
+        
+                            <input type="submit" class="btn btn-lg" value="Submit" id="submit-login-button">
+                        </form>
+                    </div>-->
+
+                </div>
+            </nav>
+        </div>
+
+        <div class="left-menu">
+            <a href="./index.html" class="text-decoration-none">
+                <h3 id="title">Wanderlust</h3>
+            </a>
+
+            <h5 id="discover-subtitle">DISCOVER</h4>
+            <ul>
+                <li><a class="nav text-decoration-none" href="#" id="search-pill">&#128269; Cerca</a></li>
+                <li><a class="nav current text-decoration-none" href="#a" id="near-me-pill">&#128205; Vicino a me</a></li>
+            </ul>
+
+            <h5 id="test-subtitle">TEST</h5>
+            <ul>
+                <li><a class="nav text-decoration-none" href="#" id="flights-pill">&#9992; Voli</a></li>
+                <li><a class="nav text-decoration-none" href="#" id="hotels-pill">&#127976; Hotel</a></li>
+                <li><a class="nav text-decoration-none" href="#" id="restaurants-pill">&#127860; Ristoranti</a></li>
+                <li><a class="nav text-decoration-none" href="#" id="attractions-pill">&#128509; Attrazioni</a></li>
+                <li><a class="nav text-decoration-none" href="#" id="activities-pill">&#128692; Attività</a></li>
+            </ul>
+            <!--<div class="btn-group">
+                <a href="#" class="dropdown-toggle show text-black text-decoration-none" data-bs-toggle="dropdown">
+                    <img src="./imgs/montagna.jpg" width="40" height="40" id="user-pic" class="rounded-circle">
+                    <strong>User</strong>
+                </a>
+                <ul class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Accedi</a>
+                    <a class="dropdown-item" href="#">Registrati</a>
+                </ul>
+            </div>-->
+
+            <h5 id="test-subtitle">PROFILO</h5>
+            <div class="user-buttons">
+                <input type="button" class="btn" value="Registrati" id="signup-button-lm">
+                <input type="button" class="btn" value="Accedi" id="login-button-lm">
+            </div>
+        </div>
+
+        <input type="text" id="search-bar" placeholder="&#128269;">
+
+        <div class="signup-form-container">
+            <form action="" method="post" id="signup-form">
+                <h1 style="color: #9e44f3; font-weight: 800;">Registrazione</h1>
+
+                <label for="username" style="float: left;">Username</label>
+                <input type="text" placeholder="Username" name="username" autofocus required>
+
+                <label for="email" style="float: left;">Email</label>
+                <input type="text" placeholder="Enter Email" name="email" required>
+
+                <label for="psw" style="float: left;">Password</label>
+                <input type="password" placeholder="Enter Password" name="psw" required>
+
+                <input type="submit" class="btn btn-lg" value="Submit" id="submit-signup-button">
+            </form>
+        </div>
+
+        <div class="login-form-container">
+            <form action="" method="post" id="login-form">
+                <h1 style="color: #ff9102; font-weight: 800;">Accesso</h1>
+
+                <label for="email" style="float: left;">Email</label>
+                <input type="text" placeholder="Enter Email" name="email" autofocus required>
+
+                <label for="psw" style="float: left;">Password</label>
+                <input type="password" placeholder="Enter Password" name="psw" required>
+
+                <input type="submit" class="btn btn-lg" value="Submit" id="submit-login-button">
+            </form>
+        </div>
+        
+        <div class="right-container">
+            <div class="tips-container">
+                <h1 id="near-me-title">Vicino a me</h1>
+                <div class="near-me-container">
+                    <a href="#" class="text-decoration-none"> 
+                        <h1 class="tip" id="tip-pill1">Hotel</h1>
+                    </a>
+                    <a href="#" class="text-decoration-none">
+                        <h1 class="tip" id="tip-pill2">Ristoranti</h1>
+                    </a>
+                    <a href="#" class="text-decoration-none">
+                        <h1 class="tip" id="tip-pill3">Attrazioni</h1>
+                    </a>
+                </div>
+            </div>
+
+            <div class="cats-container">
+                <h1 id="first-cat-title">Hotel</h1>
+                <div class="first-cat-container">
+                    <a href="#" class="text-decoration-none"> 
+                        <h1 class="category me-4" id="cat-pill1">Hotel 1</h1>
+                    </a>
+                    <a href="#" class="text-decoration-none"> 
+                        <h1 class="category me-4" id="cat-pill2">Hotel 2</h1>
+                    </a>
+                    <a href="#" class="text-decoration-none"> 
+                        <h1 class="category me-4" id="cat-pill3">Hotel 3</h1>
+                    </a>
+                    <a href="#" class="text-decoration-none"> 
+                        <h1 class="category me-4" id="cat-pill4">Hotel 4</h1>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </body>
+</html>
