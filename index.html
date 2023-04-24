@@ -4,9 +4,7 @@
         <title>Wanderlust</title>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <script type="text/javascript" src="./jquery-3.6.4.min.js"></script>
-        <!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> jQuery CDN, errore 'browser is not defined' nella console JavaScript -->
-        <!--<script type="text/javascript" src="./bootstrap/js/bootstrap.bundle.min.js"></script> Per dropdown, altrimenti va bene bootstrap.min.js -->
+        <script src="./jquery-3.6.4.min.js"></script>
         <script type="text/javascript" src="./bootstrap/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="./script.js"></script>
         <link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap.min.css"/>
@@ -40,37 +38,6 @@
                             </li>
                         </ul>
                     </div>
-
-                    <!--<div class="signup-form-container">
-                        <form action="" method="post" id="signup-form">
-                            <h1 style="color: #9e44f3; font-weight: 800;">Registrazione</h1>
-    
-                            <label for="username" style="float: left;">Username</label>
-                            <input type="text" placeholder="Username" name="username" autofocus required>
-
-                            <label for="email" style="float: left;">Email</label>
-                            <input type="text" placeholder="Enter Email" name="email" required>
-    
-                            <label for="psw" style="float: left;">Password</label>
-                            <input type="password" placeholder="Enter Password" name="psw" required>
-    
-                            <input type="submit" class="btn btn-lg" value="Submit" id="submit-signup-button">
-                        </form>
-                    </div>
-
-                    <div class="login-form-container">
-                        <form action="" method="post" id="login-form">
-                            <h1 style="color: #ff9102; font-weight: 800;">Accesso</h1>
-        
-                            <label for="email" style="float: left;">Email</label>
-                            <input type="text" placeholder="Enter Email" name="email" autofocus required>
-        
-                            <label for="psw" style="float: left;">Password</label>
-                            <input type="password" placeholder="Enter Password" name="psw" required>
-        
-                            <input type="submit" class="btn btn-lg" value="Submit" id="submit-login-button">
-                        </form>
-                    </div>-->
 
                 </div>
             </nav>
@@ -117,6 +84,8 @@
 
         <div class="signup-form-container">
             <form action="" method="post" id="signup-form">
+                <button type="button" class="btn-close" aria-label="Chiudi" id="close-signup-form"></button>
+                
                 <h1 style="color: #9e44f3; font-weight: 800;">Registrazione</h1>
 
                 <label for="username" style="float: left;">Username</label>
@@ -134,6 +103,8 @@
 
         <div class="login-form-container">
             <form action="" method="post" id="login-form">
+                <button type="button" class="btn-close" aria-label="Chiudi" id="close-login-form"></button>
+
                 <h1 style="color: #ff9102; font-weight: 800;">Accesso</h1>
 
                 <label for="email" style="float: left;">Email</label>

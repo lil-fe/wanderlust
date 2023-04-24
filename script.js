@@ -15,6 +15,14 @@ $(document).ready(function() {
         toggleLoginFormLM();
     });
 
+    $("#close-signup-form").on("click", function() {
+        closeSignupForm();
+    });
+
+    $("#close-login-form").on("click", function() {
+        closeLoginForm();
+    });
+
     /* Gestione search-bar del left-menu */
     $(".nav").on("click", function() {
         setCurrentPill($(this).attr("id"));
@@ -37,17 +45,19 @@ $(document).ready(function() {
     });
 
     /* Chiusura search-bar del top-menu */
-    $(".right-container").on("click", function() {
-        if (425 < $(window).width() && $(window).width() <= 1024 && $("#search-bar").is(":enabled")) {
-            $("#search-bar").css("top", "30px");
-            $("#search-bar").css("max-width", "55px");
-            $(".right-container").css("margin-top", "0px");
-            $("#signup-button").prop("disabled", false);
-            $("#login-button").prop("disabled", false);
-        } else if ($(window).width() <= 425 && $("#search-bar").is(":enabled")) {
-            $("#search-bar").css("max-width", "55px");
-            $("#signup-button").prop("disabled", false);
-            $("#login-button").prop("disabled", false);
+    $("body > *").not("body > #search-bar").on("click", function() {
+        if ($("#search-bar").css("top") == "110px") {
+            if (425 < $(window).width() && $(window).width() <= 1024) {
+                $("#search-bar").css("top", "30px");
+                $("#search-bar").css("max-width", "55px");
+                $(".right-container").css("margin-top", "0px");
+                $("#signup-button").prop("disabled", false);
+                $("#login-button").prop("disabled", false);
+            } else if ($(window).width() <= 425) {
+                $("#search-bar").css("max-width", "55px");
+                $("#signup-button").prop("disabled", false);
+                $("#login-button").prop("disabled", false);
+            }
         }
     });
 
@@ -70,7 +80,7 @@ function toggleSearchBar() {
     if ($("#search-pill").hasClass("current")) {
         $("#search-bar").fadeIn();
         if ($(window).width() > 1024) {
-            $("#search-bar").css("max-width", "800px")
+            $("#search-bar").css("max-width", "750px");
             $(".right-container").css("margin-top", "75px");
         }
     } else {
@@ -82,6 +92,7 @@ function toggleSearchBar() {
     }
 }
 
+/* Apre il form di registrazione e disabilita gli altri pulsanti. */
 function toggleSignupForm() {
     if ($("#login-button").is(":enabled")) {
         $("#signup-button").css("padding", "10px 60px");
@@ -104,6 +115,32 @@ function toggleSignupForm() {
     }
 }
 
+/* Apre il form di registrazione *DA FINIRE* */
+/*function toggleSignupForm() {
+    if ($("#signup-button").css("padding") == "10px 20px") {
+        if ($(".login-form-container").css("display") == "block")
+            $(".login-form-container").fadeToggle();    // forse fadeOut()
+        if ($("#search-bar").css("max-width") == "800px") {
+            toggleSearchBar();
+            //$("#search-bar").css("max-width", "50px");
+            //$("#search-bar").css("top", "30px")";
+            //$(".right-container").css("margin-top", "0px");
+        }
+        $("#signup-button").css("padding", "10px 60px");
+        $("#login-button").css("padding", "10px 10px");
+        $(".signup-form-container").fadeToggle();
+        $(".signup-form-container").css("transform", "scale(1.0)");
+        $(".right-container").css("margin-top", "470px");
+    } else {
+        $("#signup-button").css("padding", "10px 20px");
+        $("#login-button").css("padding", "10px 30px");
+        $(".signup-form-container").fadeToggle();
+        $(".signup-form-container").css("transform", "scale(0.0)");
+        $(".right-container").css("margin-top", "0px");
+    }
+}*/
+
+/* Apre il form di accesso e disabilita gli altri pulsanti. */
 function toggleLoginForm() {
     if ($("#signup-button").is(":enabled")) {
         $("#login-button").css("padding", "10px 60px");
@@ -112,7 +149,8 @@ function toggleLoginForm() {
         $("#search-bar").prop("disabled", true);
         $("#search-bar").css("opacity", "0.5");
         $(".login-form-container").fadeToggle();
-        $(".login-form-container").css("transform", "scale(1.0)"); 
+        $(".login-form-container").css("transform", "scale(1.0)");
+        $(".right-container").css("margin-top", "360px");
     } else {
         $("#login-button").css("padding", "10px 30px");
         $("#signup-button").css("padding", "10px 20px");
@@ -121,7 +159,77 @@ function toggleLoginForm() {
         $("#search-bar").css("opacity", "1");
         $(".login-form-container").fadeToggle();
         $(".login-form-container").css("transform", "scale(0.0)");
+        $(".right-container").css("margin-top", "0px");
     }
+}
+
+/* Apre il form di accesso *DA FINIRE* */
+/*function toggleLoginForm() {
+    if ($("#login-button").css("padding") == "10px 30px") {
+        if ($(".signup-form-container").css("display") == "block")
+            $(".signup-form-container").fadeToggle();    // forse fadeOut()
+        if ($("#search-bar").css("max-width") == "800px") {
+            toggleSearchBar();
+            //$("#search-bar").css("max-width", "50px");
+            //$("#search-bar").css("top", "30px")";
+            //$(".right-container").css("margin-top", "0px");
+        }
+        $("#login-button").css("padding", "10px 60px");
+        $("#signup-button").css("padding", "10px 10px");
+        $(".login-form-container").fadeToggle();
+        $(".login-form-container").css("transform", "scale(1.0)");
+        $(".right-container").css("margin-top", "360px");
+    } else {
+        $("#login-button").css("padding", "10px 30px");
+        $("#signup-button").css("padding", "10px 20px");
+        $(".login-form-container").fadeToggle();
+        $(".login-form-container").css("transform", "scale(0.0)");
+        $(".right-container").css("margin-top", "0px");
+    }
+}*/
+
+function openSignupForm() {
+    $("#signup-button").css("padding", "10px 60px");
+    $("#login-button").css("padding", "10px 10px");
+    $("#login-button").prop("disabled", true);
+    $("#search-bar").prop("disabled", true);
+    $("#search-bar").css("opacity", "0.5");
+    $(".signup-form-container").fadeToggle();
+    $(".signup-form-container").css("transform", "scale(1.0)");
+    $(".right-container").css("margin-top", "470px");
+}
+
+function closeSignupForm() {
+    $("#signup-button").css("padding", "10px 20px");
+    $("#login-button").css("padding", "10px 30px");
+    $("#login-button").prop("disabled", false);
+    $("#search-bar").prop("disabled", false);
+    $("#search-bar").css("opacity", "1");
+    $(".signup-form-container").fadeToggle();
+    $(".signup-form-container").css("transform", "scale(0.0)");
+    $(".right-container").css("margin-top", "0px");
+}
+
+function openLoginForm() {
+    $("#login-button").css("padding", "10px 60px");
+    $("#signup-button").css("padding", "10px 10px");
+    $("#signup-button").prop("disabled", true);
+    $("#search-bar").prop("disabled", true);
+    $("#search-bar").css("opacity", "0.5");
+    $(".login-form-container").fadeToggle();
+    $(".login-form-container").css("transform", "scale(1.0)");
+    $(".right-container").css("margin-top", "360px");
+}
+
+function closeLoginForm() {
+    $("#login-button").css("padding", "10px 30px");
+    $("#signup-button").css("padding", "10px 20px");
+    $("#signup-button").prop("disabled", false);
+    $("#search-bar").prop("disabled", false);
+    $("#search-bar").css("opacity", "1");
+    $(".login-form-container").fadeToggle();
+    $(".login-form-container").css("transform", "scale(0.0)");
+    $(".right-container").css("margin-top", "0px");
 }
 
 function setCurrentPill(pillId) {
