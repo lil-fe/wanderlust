@@ -1,0 +1,21 @@
+* Legenda *
+Da fare: >>>
+Implementato per metà: ###
+
+* Importante *
+>>> Restrictare l'API key al dominio prima di implementarla.
+    API: https://rapidapi.com/DataCrawler/api/tripadvisor16
+>>> Implementare "signup.php" e "login.php" con postgresql attraverso la tabella "users".
+    Colonne: username (varchar 15), email (varchar 40), password (varchar 20).
+
+* Idee *
+### Abilitare il click sui bottoni (registrazione/accesso, searchbar) anche se sono già premuti gli altri (FUNZIONI DA FINIRE IN script.js).
+>>> (Versione Desktop) Implementare i form con i modal di bootstrap.
+    Documentazione: https://getbootstrap.com/docs/5.0/components/modal/
+>>> Aggiungere il controllo di correttezza dei form.
+
+* Fix *
+### (Versione Mobile) Cambiare l'attributo "position" dei form-container da "position: absolute" a "position: relative" e aggiustare i relativi margini.
+    Questo dovrebbe risolvere il problema dello scrolling (avendo un form aperto e scrollando verso l'alto, si bugga tutto).
+    Problema: rimuove l'animazione del right-container; cercare quindi se esiste qualcosa a riguardo.
+>>> (Versione Desktop) Aggiustare le dimensioni del left-menu e dei bottoni di registrazione/accesso.
