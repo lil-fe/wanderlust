@@ -3,7 +3,7 @@
 }
 
 html, body {
-    /*overflow-x: hidden;*/
+    overflow-x: hidden;
     height: 100%;
 }
 
@@ -75,7 +75,7 @@ body {
     right: 0;
     margin-left: auto;
     margin-right: auto;
-    transform: translateX(-50%);
+    /*transform: translateX(-50%);*/
     top: 110px;
     max-width: 400px;
     width: 100%;
@@ -567,6 +567,8 @@ ul {
         font-size: 1.6em;
     }
     .signup-form-container {
+        position: inherit;
+        margin-bottom: 15px;
         max-width: 900px;
     }
     .login-form-container {
@@ -644,11 +646,11 @@ ul {
     }
     .signup-form-container {
         max-width: 380px;
-        margin-top: 135px;
+        /*margin-top: 135px;*/
     }
     .login-form-container {
         max-width: 380px;
-        margin-top: 135px;
+        /*margin-top: 135px;*/
     }
     .right-container {
         max-width: 380px;

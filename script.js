@@ -102,7 +102,7 @@ function toggleSignupForm() {
         $("#search-bar").css("opacity", "0.5");
         $(".signup-form-container").fadeToggle();
         $(".signup-form-container").css("transform", "scale(1.0)");
-        $(".right-container").css("margin-top", "470px");
+        //$(".right-container").css("margin-top", "470px");
     } else {
         $("#signup-button").css("padding", "10px 20px");
         $("#login-button").css("padding", "10px 30px");
@@ -111,7 +111,7 @@ function toggleSignupForm() {
         $("#search-bar").css("opacity", "1");
         $(".signup-form-container").fadeToggle();
         $(".signup-form-container").css("transform", "scale(0.0)");
-        $(".right-container").css("margin-top", "0px");
+        //$(".right-container").css("margin-top", "0px");
     }
 }
 
