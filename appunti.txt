@@ -1,21 +1,34 @@
-* Legenda *
-Da fare: >>>
-Implementato per metà: ###
+-------- Legenda --------
+>>> Da fare
+    ### Parte fatta
+!!! Fatto
+-------------------------
 
-* Importante *
+-------- IMPORTANTE --------
 >>> Restrictare l'API key al dominio prima di implementarla.
     API: https://rapidapi.com/DataCrawler/api/tripadvisor16
->>> Implementare "signup.php" e "login.php" con postgresql attraverso la tabella "users".
-    Colonne: username (varchar 15), email (varchar 40), password (varchar 20).
+!!! Implementare "signup.php" e "login.php" con postgresql attraverso la tabella "users".
+    Colonne: username (varchar 20), email (varchar 40), password (varchar 20).
+>>> Utilizzare un algoritmo di hashing per le password.
+>>> Permettere l'accesso sia con email che con username.
+>>> Impostare la pagina di redirect alla home dopo registrazione/accesso.
+>>> Aggiungere il controllo di correttezza dei form.
+    Ricordarsi di rispettare la lunghezza delle colonne della tabella users.
+----------------------------
 
-* Idee *
-### Abilitare il click sui bottoni (registrazione/accesso, searchbar) anche se sono già premuti gli altri (FUNZIONI DA FINIRE IN script.js).
+-------- Idee --------
+>>> Abilitare il click sui bottoni (registrazione/accesso, searchbar) anche se sono già premuti gli altri.
+    ### Funzioni da finire in script.js
 >>> (Versione Desktop) Implementare i form con i modal di bootstrap.
     Documentazione: https://getbootstrap.com/docs/5.0/components/modal/
->>> Aggiungere il controllo di correttezza dei form.
+    Da provare anche per mobile.
+>>> Cambiare i placeholder per i campi dei form.
+    Esempio: Invece di "Enter email" -> "name@email.com"
+----------------------
 
-* Fix *
-### (Versione Mobile) Cambiare l'attributo "position" dei form-container da "position: absolute" a "position: relative" e aggiustare i relativi margini.
+-------- Fix --------
+!!! (Versione Mobile) Cambiare l'attributo "position" dei form-container da "position: absolute" a "position: inherit" e aggiustare i relativi margini.
     Questo dovrebbe risolvere il problema dello scrolling (avendo un form aperto e scrollando verso l'alto, si bugga tutto).
     Problema: rimuove l'animazione del right-container; cercare quindi se esiste qualcosa a riguardo.
->>> (Versione Desktop) Aggiustare le dimensioni del left-menu e dei bottoni di registrazione/accesso.
+!!! (Versione Desktop) Aggiustare le dimensioni del left-menu e dei bottoni di registrazione/accesso.
+---------------------

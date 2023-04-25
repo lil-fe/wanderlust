@@ -3,7 +3,7 @@
         header("Location: /");
     } else {
         $dbconn = pg_connect("host=localhost user=postgres password=psql
-            port=5432 dbname=WanderlustUsers")
+            port=5432 dbname=Wanderlust")
             or die('Connessione al db fallita: ' . pg_last_error());
     }
 ?>
@@ -15,26 +15,28 @@
     <body>
         <?php
             if ($dbconn) {
+                /* Controlla se l'utente con questa mail è già registrato. */
                 $email = $_POST["email"];
-                $q1 = "SELECT * FROM utente WHERE email=$1";
-                $res = pg_query_params($dbconn, $q1, array($email));
-                
-                if (!($tuple = pg_fetch_array($res, null, PGSQL_ASSOC))) {
-                    echo "Non ti sei ancora registrato.<br/>
-                        Clicca <a href=./index.html>qui</a> per registrarti.";
-                } else {
-                    //$pwd = password_hash($_POST["pwd"], PASSWORD_DEFAULT);
-                    $pwd = $_POST["pwd"];
-                    $q2 = "SELECT * FROM utente WHERE email=$1 AND pwd=$2";
-                    $res = pg_query_params($dbconn, $q2, array($email, $pwd));
-                    if (!($tuple = pg_fetch_array($res, null, PGSQL_ASSOC))) {
-                        echo "Password errata.<br/>
-                            Clicca <a href=./login.html>qui</a> per riprovare.";
-                    } else {
-                        $name = $tuple["name"];
-                        echo "Login effettuato: benvenuto $name.";
-                    }
+                $query = "SELECT * FROM users WHERE email=$1";
+                $result = pg_query_params($dbconn, $query, array($email));
+                if (!($tuple = pg_fetch_array($result, null, PGSQL_ASSOC))) {
+                    echo "Non ti sei ancora registrato.";
+                    return;
                 }
+
+                //$pwd = password_hash($_POST["pwd"], PASSWORD_DEFAULT);
+                /* Controlla se la password inserita coincide con quella nel db. */
+                $psw = $_POST["psw"];
+                $query = "SELECT * FROM users WHERE email=$1 AND psw=$2";
+                $result = pg_query_params($dbconn, $query, array($email, $psw));
+                if (!($tuple = pg_fetch_array($result, null, PGSQL_ASSOC))) {
+                    echo "Password errata.";
+                    return;
+                }
+
+                /* Blocco da eseguire in caso di successo. */
+                $username = $tuple["username"];
+                echo "Benvenuto $username.";
             }
 
             pg_free_result($res);

@@ -150,7 +150,7 @@ function toggleLoginForm() {
         $("#search-bar").css("opacity", "0.5");
         $(".login-form-container").fadeToggle();
         $(".login-form-container").css("transform", "scale(1.0)");
-        $(".right-container").css("margin-top", "360px");
+        //$(".right-container").css("margin-top", "360px");
     } else {
         $("#login-button").css("padding", "10px 30px");
         $("#signup-button").css("padding", "10px 20px");
@@ -159,7 +159,7 @@ function toggleLoginForm() {
         $("#search-bar").css("opacity", "1");
         $(".login-form-container").fadeToggle();
         $(".login-form-container").css("transform", "scale(0.0)");
-        $(".right-container").css("margin-top", "0px");
+        //$(".right-container").css("margin-top", "0px");
     }
 }
 
