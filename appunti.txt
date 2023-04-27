@@ -17,13 +17,14 @@
 ----------------------------
 
 -------- Idee --------
->>> Abilitare il click sui bottoni (registrazione/accesso, searchbar) anche se sono già premuti gli altri.
-    ### Funzioni da finire in script.js
->>> (Versione Desktop) Implementare i form con i modal di bootstrap.
+!!! Abilitare il click sui bottoni (registrazione/accesso, searchbar) anche se sono già premuti gli altri.
+!!! (Versione Desktop) Provare i modal di bootstrap.
     Documentazione: https://getbootstrap.com/docs/5.0/components/modal/
-    Da provare anche per mobile.
 >>> Cambiare i placeholder per i campi dei form.
     Esempio: Invece di "Enter email" -> "name@email.com"
+>>> Cambiare il right-container: lo scorrimento orizzontale (overflow x) delle categorie crea problemi di larghezza.
+    Pensare ad un nuovo design.
+>>> (Versione Desktop) All'apertura dei form, cambiare intensità a 0.1 di tutto tranne form e pulsanti.
 ----------------------
 
 -------- Fix --------
@@ -31,4 +32,7 @@
     Questo dovrebbe risolvere il problema dello scrolling (avendo un form aperto e scrollando verso l'alto, si bugga tutto).
     Problema: rimuove l'animazione del right-container; cercare quindi se esiste qualcosa a riguardo.
 !!! (Versione Desktop) Aggiustare le dimensioni del left-menu e dei bottoni di registrazione/accesso.
+!!! (Versione Desktop) Quando uno dei form viene chiuso tramite la X, non viene riattivato l'altro pulsante.
+>>> (Versione Mobile) Gestire l'apertura della search bar quando c'è un form aperto.
+    Da vedere se servirà la search bar.
 ---------------------

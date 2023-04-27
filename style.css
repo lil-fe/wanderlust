@@ -13,7 +13,7 @@ body {
     box-sizing: border-box;
     width: 100%;
 
-    transition: all 1s ease;
+    transition: all 0.5s ease;
 }
 
 #search-bar {
@@ -60,7 +60,7 @@ body {
     font-size: 1em;
     font-weight: 700;
 
-    transition: all 0.5s ease;
+    transition: all 0.3s ease;
 }
 
 #signup-button:hover {
@@ -79,22 +79,22 @@ body {
     top: 110px;
     max-width: 400px;
     width: 100%;
+    z-index: 2;
 
-    transition: transform 0.5s ease;
+    transition: transform 0.3s ease;
     transform: scale(0);
 }
 
 #close-signup-form {
     float: right;
-    background-color: red;
+    background-color: rgb(247, 115, 115);
     border-radius: 30px;
 
     transition: all 0.1s ease;
 }
 
 #close-signup-form:hover {
-    /*border-radius: 5px;*/
-    transform: scale(1.30);
+    transform: scale(1.20);
 }
 
 #close-signup-form:focus {
@@ -162,7 +162,7 @@ body {
     font-size: 1em;
     font-weight: 700;
 
-    transition: all 0.5s ease;
+    transition: all 0.3s ease;
 }
 
 #login-button:hover {
@@ -171,7 +171,7 @@ body {
 
 #close-login-form {
     float: right;
-    background-color: red;
+    background-color: rgb(247, 115, 115);
     border-radius: 30px;
 
     transition: all 0.1s ease;
@@ -179,7 +179,7 @@ body {
 
 #close-login-form:hover {
     /*border-radius: 5px;*/
-    transform: scale(1.30);
+    transform: scale(1.20);
 }
 
 #close-login-form:focus {
@@ -190,6 +190,7 @@ body {
 .login-form-container {
     display: none;
     position: absolute;
+    text-align: center;
     left: 0;
     right: 0;
     margin-left: auto;
@@ -199,7 +200,7 @@ body {
     max-width: 400px;
     width: 100%;
 
-    transition: transform 0.5s ease;
+    transition: transform 0.3s ease;
     transform: scale(0);
 }
 
@@ -345,6 +346,7 @@ ul {
     font-size: 1em;
     font-weight: 700;
     margin-right: 5px;
+    z-index: 2;
 
     transition: all 0.5s ease;
 }
@@ -360,6 +362,7 @@ ul {
     padding: 10px 20px;
     font-size: 1em;
     font-weight: 700;
+    z-index: 2;
 
     transition: all 0.5s ease;
 }
@@ -511,12 +514,25 @@ ul {
     background-image: url(./imgs/sugg_background4.jpg);
 }
 
-/* iPad 2021 orizzontale */
+
+
+/* PROBLEMA: overflow x delle categorie 
+    Cambiandolo si dovrebbe risolvere */
+/* Prova per iPad Pro 6 orizzontale */
 @media screen and (max-width: 1366px) {
-    
+    .right-container {
+        max-width: 900px;
+    }
 }
 
-/* iPad 2021 verticale */
+/* Prova per iPad 2021 orizzontale */
+@media screen and (max-width: 1080px) {
+    .right-container {
+        max-width: 680px;
+    }
+}
+/* --------------------------------------*/
+
 @media screen and (max-width: 1024px) {
     .left-menu {
         display: none;

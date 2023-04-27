@@ -75,13 +75,37 @@
 
             <h5 id="test-subtitle">PROFILO</h5>
             <div class="user-buttons">
-                <input type="button" class="btn" value="Registrati" id="signup-button-lm">
+                <input type="button" class="btn" value="Registrati" id="signup-button-lm" data-bs-toggle="modal" data-bs-target="#signupModal">
                 <input type="button" class="btn" value="Accedi" id="login-button-lm">
             </div>
         </div>
 
         <input type="text" id="search-bar" placeholder="&#128269;">
 
+        <!--<div class="modal fade" id="signupModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" style="border-radius: 25px;">
+                        <div class="signup-form-container">
+                            <form action="./forms/signup.php" method="post" id="signup-form">
+                                <button type="button" class="btn-close" aria-label="Chiudi" id="close-signup-form" data-bs-dismiss="modal"></button>
+                                
+                                <h1 style="color: #9e44f3; font-weight: 800;">Registrazione</h1>
+                
+                                <label for="username" style="float: left;">Username</label>
+                                <input type="text" placeholder="Username" name="username" autofocus required>
+                
+                                <label for="email" style="float: left;">Email</label>
+                                <input type="text" placeholder="Enter Email" name="email" required>
+                
+                                <label for="psw" style="float: left;">Password</label>
+                                <input type="password" placeholder="Enter Password" name="psw" required>
+                
+                                <input type="submit" role="button" class="btn btn-lg" value="Submit" id="submit-signup-button">
+                            </form>
+                    </div>
+                </div>
+            </div>
+        </div>-->
         <div class="signup-form-container">
             <form action="./forms/signup.php" method="post" id="signup-form">
                 <button type="button" class="btn-close" aria-label="Chiudi" id="close-signup-form"></button>

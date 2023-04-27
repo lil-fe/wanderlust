@@ -9,12 +9,10 @@ $(document).ready(function() {
 
     $("#signup-button-lm").on("click", function() {
         toggleSignupFormLM();
-        //toggleSignupForm();
     });
 
     $("#login-button-lm").on("click", function() {
         toggleLoginFormLM();
-        //toggleLoginForm();
     });
 
     $("#close-signup-form").on("click", function() {
@@ -117,24 +115,24 @@ function toggleSearchBar() {
     }
 }*/
 
-/* Apre il form di registrazione */
+/* Apre il form di registrazione *DA FINIRE* */
 function toggleSignupForm() {
     /* form chiusi */
     if ($("#signup-button").css("padding") == "10px 20px") {
         $("#signup-button").css("padding", "10px 60px");
         $("#login-button").css("padding", "10px 10px");
-        $(".signup-form-container").fadeIn();   // fadeIn
+        $(".signup-form-container").fadeToggle();
         $(".signup-form-container").css("transform", "scale(1.0)");
     /* form aperto */
     } else if ($("#signup-button").css("padding") == "10px 60px") {
         $("#signup-button").css("padding", "10px 20px");
         $("#login-button").css("padding", "10px 30px");
-        $(".signup-form-container").fadeOut();   // fadeOut
+        $(".signup-form-container").fadeToggle();
         $(".signup-form-container").css("transform", "scale(0.0)");
     } else {    // login form aperto
         $("#signup-button").css("padding", "10px 60px");
         $("#login-button").css("padding", "10px 10px");
-        $(".login-form-container").fadeToggle(1);
+        $(".login-form-container").fadeToggle();
         $(".login-form-container").css("transform", "scale(0.0)");
         $(".signup-form-container").fadeToggle();
         $(".signup-form-container").css("transform", "scale(1.0)");
@@ -164,7 +162,7 @@ function toggleSignupForm() {
     }
 }*/
 
-/* Apre il form di accesso */
+/* Apre il form di accesso *DA FINIRE* */
 function toggleLoginForm() {
     /* form chiusi */
     if ($("#login-button").css("padding") == "10px 30px") {
@@ -172,16 +170,16 @@ function toggleLoginForm() {
         $("#signup-button").css("padding", "10px 10px");
         $(".login-form-container").fadeToggle();
         $(".login-form-container").css("transform", "scale(1.0)");
-    /* login form aperto */
+    /* form aperto */
     } else if ($("#login-button").css("padding") == "10px 60px") {
         $("#login-button").css("padding", "10px 30px");
         $("#signup-button").css("padding", "10px 20px");
         $(".login-form-container").fadeToggle();
         $(".login-form-container").css("transform", "scale(0.0)");
-    } else {    // signup form aperto
+    } else {    // login form aperto
         $("#login-button").css("padding", "10px 60px");
         $("#signup-button").css("padding", "10px 10px");
-        $(".signup-form-container").fadeToggle(1);
+        $(".signup-form-container").fadeToggle();
         $(".signup-form-container").css("transform", "scale(0.0)");
         $(".login-form-container").fadeToggle();
         $(".login-form-container").css("transform", "scale(1.0)");
@@ -201,13 +199,13 @@ function openSignupForm() {
 
 function closeSignupForm() {
     if ($(".left-menu").css("display") == "flex") {
-        //$("#login-button-lm").prop("disabled", false);
+        $("#login-button-lm").prop("disabled", false);
         $(".signup-form-container").fadeToggle();
         $(".signup-form-container").css("transform", "scale(0.0)");
     } else {
         $("#signup-button").css("padding", "10px 20px");
         $("#login-button").css("padding", "10px 30px");
-        //$("#login-button").prop("disabled", false);
+        $("#login-button").prop("disabled", false);
         $("#search-bar").prop("disabled", false);
         $("#search-bar").css("opacity", "1");
         $(".signup-form-container").fadeToggle();
@@ -247,7 +245,7 @@ function setCurrentPill(pillId) {
     $("#" + pillId).addClass("current");
 }
 
-/*function toggleSignupFormLM() {
+function toggleSignupFormLM() {
     if ($("#login-button-lm").is(":enabled")) {
         $("#login-button-lm").prop("disabled", true);
         $("#search-bar").prop("disabled", true);
@@ -261,43 +259,20 @@ function setCurrentPill(pillId) {
         $(".signup-form-container").fadeToggle();
         $(".signup-form-container").css("transform", "scale(0.0)");
     }
-}*/
-
-function toggleSignupFormLM() {
-    /* form chiusi */
-    if ($(".signup-form-container").css("display") == "none" && $(".login-form-container").css("display") == "none") {
-        $(".signup-form-container").fadeToggle();
-        $(".signup-form-container").css("transform", "scale(1.0)");
-        $("body > *").not("body > .signup-form-container").css("opacity", "0.1");
-    /* signup form aperto -> va chiuso */
-    } else if ($(".signup-form-container").css("display") == "block") {
-        $(".signup-form-container").fadeToggle();
-        $(".signup-form-container").css("transform", "scale(0.0)");
-        $("body > *").not("body > .signup-form-container").css("opacity", "1");
-    /* login form aperto */
-    } else if ($(".login-form-container").css("display") == "block") {
-        $(".login-form-container").fadeToggle();
-        $(".login-form-container").css("transform", "scale(0.0)");
-        $(".signup-form-container").fadeToggle();
-        $(".signup-form-container").css("transform", "scale(1.0)");
-        $("body > *").not("body > .signup-form-container").css("opacity", "0.1");
-    }
 }
 
 function toggleLoginFormLM() {
-    /* form chiusi */
-    if ($(".signup-form-container").css("display") == "none" && $(".login-form-container").css("display") == "none") {
+    if ($("#signup-button-lm").is(":enabled")) {
+        $("#signup-button-lm").prop("disabled", true);
+        $("#search-bar").prop("disabled", true);
+        $("#search-bar").css("opacity", "0.5");
         $(".login-form-container").fadeToggle();
         $(".login-form-container").css("transform", "scale(1.0)");
-    /* login form aperto -> va chiuso */
-    } else if ($(".login-form-container").css("display") == "block") {
+    } else {
+        $("#signup-button-lm").prop("disabled", false);
+        $("#search-bar").prop("disabled", false);
+        $("#search-bar").css("opacity", "1");
         $(".login-form-container").fadeToggle();
         $(".login-form-container").css("transform", "scale(0.0)");
-    /* signup form aperto */
-    } else if ($(".signup-form-container").css("display") == "block") {
-        $(".signup-form-container").fadeToggle();
-        $(".signup-form-container").css("transform", "scale(0.0)");
-        $(".login-form-container").fadeToggle();
-        $(".login-form-container").css("transform", "scale(1.0)");
     }
 }
