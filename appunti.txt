@@ -33,6 +33,8 @@
 >>> Permettere l'accesso sia con email che con username.
 >>> Utilizzare un algoritmo di hashing per le password.
 >>> Aggiungere la dark mode.
+>>> Aumentare la dimensione della mappa in favore del right-container.
+    Aumentare di conseguenza le immagini collegate ai marker (da 2 a 4).
 ----------------------
 
 -------- Fix --------
@@ -42,5 +44,6 @@
 !!! (Versione Desktop) Aggiustare le dimensioni del left-menu e dei bottoni di registrazione/accesso.
 !!! (Versione Desktop) Quando uno dei form viene chiuso tramite la X, non viene riattivato l'altro pulsante.
 !!! Impedire l'apertura dei form durante le animazioni degli stessi.
+>>> Il click sulle schede funziona anche nel bianco che dipende dalla dimensione della scheda di maggiore dimensione.
 ---------------------
 

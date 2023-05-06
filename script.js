@@ -1,6 +1,6 @@
 $(document).ready(function() {
-    /*(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
-        ({key: "AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg", v: "weekly"});*/
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
+        ({key: "AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg", v: "weekly"});
 
     $("#signup-button").on("click", function() {
         toggleSignupForm();
@@ -88,10 +88,9 @@ $(document).ready(function() {
             $("#search-pill").removeClass("current");
             $("#near-me-pill").addClass("current");
             $(".search-bar-container").css("display", "none");
-            $(".right-container").css("margin", "20px 35px 0px 0px");
-            $("#map").css("display", "block");
+            $(".right-container").css("margin", "20px 35px 0px 325px");
             if ($(".signup-form-container").css("display") != "none" || $(".login-form-container").css("display") != "none" || $(".search-bar-container").css("display") != "none" || $(".map-container").css("display") != "none") {
-                $(".right-container").css("margin-left", "0px");
+                $(".right-container").css("margin-left", "325px");
             }
         } else {    // Mobile
             $(".search-bar-container").css("display", "none");
@@ -121,8 +120,9 @@ function toggleSearchBarLM() {
         $(".search-bar-container").fadeIn();
         $(".search-bar-container").css("display", "flex");
         $(".search-bar-container").css("transform", "scale(1.0)");
-        $(".right-container").css("margin-left", "440px");
+        $(".right-container").css("margin-left", "760px");
         $("#map").css("transform", "scale(1.0)");
+        $("#map").css("display", "block");
         document.getElementById("search-bar").focus();
     } else {
         $(".search-bar-container").fadeOut();
@@ -131,7 +131,7 @@ function toggleSearchBarLM() {
 
         // evita che il right-container si riespanda se è aperto uno dei due form
         if ($(".signup-form-container").css("display") == "none" && $(".login-form-container").css("display") == "none") {
-            $(".right-container").css("margin-left", "0px");
+            $(".right-container").css("margin-left", "325px");
         }
     }
 }
@@ -243,7 +243,7 @@ function toggleSignupFormLM() {
     if ($(".signup-form-container").css("display") == "none" && $(".login-form-container").css("display") == "none") {
         $(".signup-form-container").fadeToggle();
         $(".signup-form-container").css("transform", "scale(1.0)");
-        $(".right-container").css("margin-left", "440px");
+        $(".right-container").css("margin-left", "760px");
         document.signupForm.username.focus();
 
         // controlla se la mappa è aperta
@@ -257,7 +257,7 @@ function toggleSignupFormLM() {
         
         // evita che il right-container si espanda se si è in ricerca
         if ($(".search-bar-container").css("display") == "none") {
-            $(".right-container").css("margin-left", "0px");
+            $(".right-container").css("margin-left", "325px");
         } else {    // mappa aperta
             $("#map").css("top","110px");
         }
@@ -285,7 +285,7 @@ function toggleLoginFormLM() {
     if ($(".signup-form-container").css("display") == "none" && $(".login-form-container").css("display") == "none") {
         $(".login-form-container").fadeToggle();
         $(".login-form-container").css("transform", "scale(1.0)");
-        $(".right-container").css("margin-left", "440px");
+        $(".right-container").css("margin-left", "760px");
         document.loginForm.email.focus();
     // login form aperto -> va chiuso
     } else if ($(".login-form-container").css("display") == "block") {
@@ -294,7 +294,7 @@ function toggleLoginFormLM() {
         
         // controlla che nessun'altro elemento sia presente nel menu centrale (per ora solo search bar)
         if ($(".search-bar-container").css("display") == "none") {
-            $(".right-container").css("margin-left", "0px");
+            $(".right-container").css("margin-left", "325px");
         }
     // signup form aperto
     } else if ($(".signup-form-container").css("display") == "block") {
@@ -340,7 +340,7 @@ function checkSignupForm() {
 
 
 /* -------- Gestione APIs -------- */
-/*let map, infoWindow;
+let map, infoWindow;
 async function initMap() {
     const { Map } = await google.maps.importLibrary("maps");
     map = new Map(document.getElementById("map"), {
@@ -391,7 +391,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 function toggleMap() {
     $(".map-container").fadeIn();
     $("#map").css("transform", "scale(1.0)");
-}*/
+}
 
 /* -------- Richieste -------- */
 let settings;
@@ -417,14 +417,13 @@ function requestTip(input) {
         const firstRes = res[0].detailsV2;
         const firstResLat = firstRes.geocode.latitude;
         const firstResLng = firstRes.geocode.longitude;
-        //const firstResLatLng = new google.maps.LatLng(firstResLat, firstResLng);
+        const firstResLatLng = new google.maps.LatLng(firstResLat, firstResLng);
         const firstResName = firstRes.names.name;
         const firstResVenue = firstRes.names.longOnlyHierarchyTypeaheadV2;
-        //console.log(firstResLat, firstResLng);
         const firstResImages = res[0].image.photo;
-        const firstResMarkerImg = firstResImages.photoSizes[4].url;     // 2: 150x150, 4: 167x250
+        const firstResMarkerImg = firstResImages.photoSizes[2].url;
         
-        /*// finestra informativa
+        // finestra informativa
         const contentString =
             '<div class="marker-content" style="text-align: center;">' +
             '<h5 style="font-weight: 800;">' + firstResName + '</h5>' +
@@ -453,7 +452,7 @@ function requestTip(input) {
         });
         animateMarker(marker);
         map.setCenter(firstResLatLng); // la mappa viene centrata sulle coordinate del marker
-        */
+
         // creazione schede di tutti i suggerimenti
         let title = document.createElement("h1");
         title.id = "tips-title";
@@ -466,16 +465,20 @@ function requestTip(input) {
 
                 var iLat = iRes.geocode.latitude;
                 var iLng = iRes.geocode.longitude;
-                
-                //const iLatLng = new google.maps.LatLng(iLat, iLng);
+                var iLatLng = new google.maps.LatLng(iLat, iLng);
                 var iName = iRes.names.name;
                 var iVenue = iRes.names.longOnlyHierarchyTypeaheadV2;
                 var iImages = res[i].image.photo;
+                var iMarkerImg = iImages.photoSizes[2].url;
                 var iCardImg = iImages.photoSizes[5].url;
             
                 let card = document.createElement("a");
                 card.href = "#";
                 card.classList.add("text-decoration-none");
+                // gestione click sulle schede
+                let cardClickhandler = createCardClickHandler(i, iName, iVenue, iMarkerImg, iLat, iLng, iLatLng);
+                card.addEventListener("click", cardClickhandler);
+                card.dataset.index = i;
                 
                 let cardTitle = document.createElement("h1");
                 cardTitle.textContent = iName;
@@ -497,23 +500,47 @@ function animateMarker(marker) {
     marker.setAnimation(google.maps.Animation.DROP);
 }
 
+function createCardClickHandler(index, name, venue, markerImg, lat, lng, latLng) {
+    return function(event) {
+        handleTip(index, name, venue, markerImg, lat, lng, latLng);
+    }
+}
+
 // Gestione dei near me
 function requestNearMe(category) {
     
 }
 
 // Gestione delle schede dei suggerimenti
-function handleTip(i) {
-    let iRes = res[i].detailsV2;
+function handleTip(i, name, venue, markerImg, lat, lng, latLng) {
+    const contentString =
+        '<div class="marker-content" style="text-align: center;">' +
+        '<h5 style="font-weight: 800;">' + name + '</h5>' +
+        '<div class="marker-img mb-2">' +
+        '<img src="' + markerImg + '" style="border-radius: 10px; border: 1px solid grey;">' +
+        '</div>' +
+        '<h7 style="color: #8b8b8b">' + venue + '</h7>' +
+        '</div>';
+    const infoWindow = new google.maps.InfoWindow({
+        content: contentString,
+        ariaLabel: name,
+    });
 
-    const iResLat = iRes.geocode.latitude;
-    const iResLng = iRes.geocode.longitude;
-    const iResLatLng = new google.maps.LatLng(iResLat, iResLng);
-    const iResName = iRes.names.name;
-    const iResVenue = iRes.names.longOnlyHierarchyTypeaheadV2;
-    //console.log(iResLat, iResLng);
-    const iResImages = iRes[i].image.photo;
-    const iResMarkerImg = iResImages.photoSizes[2].url;
+    // marker
+    const marker = new google.maps.Marker({
+        map,
+        title: name,
+        position: { lat: lat, lng: lng },
+        animation: null,
+    });
+    marker.addListener("click", () => {
+        infoWindow.open({
+            map,
+            anchor: marker, // collega la infoWindow al marker
+        });
+    });
+    animateMarker(marker);
+    map.setCenter(latLng);
 }
 
 $(document).ready(() => {
