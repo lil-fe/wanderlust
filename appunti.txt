@@ -1,30 +1,38 @@
 -------- Legenda --------
 >>> Da fare
-    ### Parte fatta
 !!! Fatto
 -------------------------
 
 -------- IMPORTANTE --------
->>> Restrictare l'API key al dominio prima di implementarla.
-    API: https://rapidapi.com/DataCrawler/api/tripadvisor16
 !!! Implementare "signup.php" e "login.php" con postgresql attraverso la tabella "users".
     Colonne: username (varchar 20), email (varchar 40), password (varchar 20).
->>> Utilizzare un algoritmo di hashing per le password.
->>> Permettere l'accesso sia con email che con username.
+!!! Aggiungere il controllo di correttezza dei form.
+!!! Aggiungere la mappa.
+!!! (Versione Desktop) Cambio di layout.
 >>> Impostare la pagina di redirect alla home dopo registrazione/accesso.
->>> Aggiungere il controllo di correttezza dei form.
-    Ricordarsi di rispettare la lunghezza delle colonne della tabella users.
+>>> Aggiungere il profilo utente una volta loggato.
+    Aggiungere poi la funzione di logout.
+>>> Cambiare il cerca con un autocomplete per suggerimenti.
+    Aggiungere il check: se il campo è vuoto non inviare nessuna richiesta.
+    Il click al singolo suggerimento deve impostare la mappa sull'apposito marker.
+    Aggiungere una funzionalità nelle infoWindow collegate ai marker (prenotazione/preferiti).
+>>> Implementare "vicino a me".
+    Al click su una scheda di una categoria evidenziare i marker sulla mappa con locations/v2/list-nearby.
+    Ogni infoWindow deve riportare il nome del posto, una foto, la distanza e la valutazione.
+>>> (Versione Mobile) Aggiungere la sezione "cerca" sotto la navbar.
+    Idea: 6 pulsanti tondi con solamente un'emoji dentro per guadagnare spazio.
+>>> (Versione Mobile) Rivedere completamente gli elementi in base alla larghezza della finestra.
 ----------------------------
 
 -------- Idee --------
 !!! Abilitare il click sui bottoni (registrazione/accesso, searchbar) anche se sono già premuti gli altri.
 !!! (Versione Desktop) Provare i modal di bootstrap.
     Documentazione: https://getbootstrap.com/docs/5.0/components/modal/
->>> Cambiare i placeholder per i campi dei form.
-    Esempio: Invece di "Enter email" -> "name@email.com"
->>> Cambiare il right-container: lo scorrimento orizzontale (overflow x) delle categorie crea problemi di larghezza.
-    Pensare ad un nuovo design.
->>> (Versione Desktop) All'apertura dei form, cambiare intensità a 0.1 di tutto tranne form e pulsanti.
+!!! (Versione Desktop) Cambio apertura form.
+!!! Cambiare i placeholder per i campi dei form per dire all'utente cosa inserire.
+>>> Permettere l'accesso sia con email che con username.
+>>> Utilizzare un algoritmo di hashing per le password.
+>>> Aggiungere la dark mode.
 ----------------------
 
 -------- Fix --------
@@ -33,6 +41,6 @@
     Problema: rimuove l'animazione del right-container; cercare quindi se esiste qualcosa a riguardo.
 !!! (Versione Desktop) Aggiustare le dimensioni del left-menu e dei bottoni di registrazione/accesso.
 !!! (Versione Desktop) Quando uno dei form viene chiuso tramite la X, non viene riattivato l'altro pulsante.
->>> (Versione Mobile) Gestire l'apertura della search bar quando c'è un form aperto.
-    Da vedere se servirà la search bar.
+!!! Impedire l'apertura dei form durante le animazioni degli stessi.
 ---------------------
+

@@ -5,8 +5,10 @@
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <script src="./jquery-3.6.4.min.js"></script>
-        <script type="text/javascript" src="./bootstrap/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="./script.js"></script>
+        <script src="./bootstrap/js/bootstrap.min.js"></script>
+        <script src="./script.js"></script>
+        <!--<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLh1xKvgc3eJDEk7dkv8unU9PejDfy9u0&callback=initMap"></script>-->
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
         <link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" href="./style.css"/>
     </head>
@@ -48,19 +50,20 @@
                 <h3 id="title">Wanderlust</h3>
             </a>
 
-            <h5 id="discover-subtitle">DISCOVER</h4>
+            <h5 id="discover-subtitle">SCOPRI</h4>
             <ul>
-                <li><a class="nav text-decoration-none" href="#" id="search-pill">&#128269; Cerca</a></li>
-                <li><a class="nav current text-decoration-none" href="#a" id="near-me-pill">&#128205; Vicino a me</a></li>
+                <li><a class="nav text-decoration-none" href="#" id="search-pill">&#128269; Suggerimenti</a></li>
+                <li><a class="nav current text-decoration-none" href="#near-me-title" id="near-me-pill">&#128205; Vicino a me</a></li>
             </ul>
 
-            <h5 id="test-subtitle">TEST</h5>
+            <h5 id="test-subtitle">CERCA</h5>
             <ul>
-                <li><a class="nav text-decoration-none" href="#" id="flights-pill">&#9992; Voli</a></li>
+                <li><a class="nav text-decoration-none" href="#" id="flights-pill">&#9992; Aeroporti</a></li>
+                <li><a class="nav text-decoration-none" href="#" id="cruises-pill">&#128755; Crociere</a></li>
+                <li><a class="nav text-decoration-none" href="#" id="cars-pill">&#128663; Noleggio auto</a></li>
                 <li><a class="nav text-decoration-none" href="#" id="hotels-pill">&#127976; Hotel</a></li>
+                <li><a class="nav text-decoration-none" href="#" id="vacations-pill">&#127968; Case vacanza</a></li>
                 <li><a class="nav text-decoration-none" href="#" id="restaurants-pill">&#127860; Ristoranti</a></li>
-                <li><a class="nav text-decoration-none" href="#" id="attractions-pill">&#128509; Attrazioni</a></li>
-                <li><a class="nav text-decoration-none" href="#" id="activities-pill">&#128692; Attività</a></li>
             </ul>
             <!--<div class="btn-group">
                 <a href="#" class="dropdown-toggle show text-black text-decoration-none" data-bs-toggle="dropdown">
@@ -68,111 +71,93 @@
                     <strong>User</strong>
                 </a>
                 <ul class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Accedi</a>
-                    <a class="dropdown-item" href="#">Registrati</a>
+                    <a class="dropdown-item" href="#">Preferiti</a>
+                    <a class="dropdown-item" href="#">Esci</a>
                 </ul>
             </div>-->
 
             <h5 id="test-subtitle">PROFILO</h5>
             <div class="user-buttons">
-                <input type="button" class="btn" value="Registrati" id="signup-button-lm" data-bs-toggle="modal" data-bs-target="#signupModal">
+                <input type="button" class="btn" value="Registrati" id="signup-button-lm">
                 <input type="button" class="btn" value="Accedi" id="login-button-lm">
             </div>
         </div>
 
-        <input type="text" id="search-bar" placeholder="&#128269;">
+        <div class="search-bar-container">
+            <input type="text" id="search-bar" placeholder="Dove vuoi andare?" size="35">
+            <input type="submit" role="button" class="btn" value="&#128269;" id="search-button">
+        </div>
+        
+        <div class="map-container">
+            <div id="map">Spazio mappa</div>
+        </div>
 
-        <!--<div class="modal fade" id="signupModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content" style="border-radius: 25px;">
-                        <div class="signup-form-container">
-                            <form action="./forms/signup.php" method="post" id="signup-form">
-                                <button type="button" class="btn-close" aria-label="Chiudi" id="close-signup-form" data-bs-dismiss="modal"></button>
-                                
-                                <h1 style="color: #9e44f3; font-weight: 800;">Registrazione</h1>
-                
-                                <label for="username" style="float: left;">Username</label>
-                                <input type="text" placeholder="Username" name="username" autofocus required>
-                
-                                <label for="email" style="float: left;">Email</label>
-                                <input type="text" placeholder="Enter Email" name="email" required>
-                
-                                <label for="psw" style="float: left;">Password</label>
-                                <input type="password" placeholder="Enter Password" name="psw" required>
-                
-                                <input type="submit" role="button" class="btn btn-lg" value="Submit" id="submit-signup-button">
-                            </form>
-                    </div>
-                </div>
-            </div>
-        </div>-->
         <div class="signup-form-container">
-            <form action="./forms/signup.php" method="post" id="signup-form">
+            <form action="./forms/signup.php" method="post" id="signup-form" name="signupForm">
                 <button type="button" class="btn-close" aria-label="Chiudi" id="close-signup-form"></button>
                 
                 <h1 style="color: #9e44f3; font-weight: 800;">Registrazione</h1>
 
                 <label for="username" style="float: left;">Username</label>
-                <input type="text" placeholder="Username" name="username" autofocus required>
+                <input type="text" placeholder="Da 3 a 20 caratteri alfanumerici. Simboli: -_." name="username" maxlength="20" required>
 
                 <label for="email" style="float: left;">Email</label>
-                <input type="text" placeholder="Enter Email" name="email" required>
+                <input type="text" placeholder="nome@email.com" name="email" maxlength="40" required>
 
                 <label for="psw" style="float: left;">Password</label>
-                <input type="password" placeholder="Enter Password" name="psw" required>
+                <input type="password" placeholder="Da 6 a 20 caratteri alfanumerici. Simboli: -_.!?$&" name="psw" maxlength="20" required>
 
-                <input type="submit" role="button" class="btn btn-lg" value="Submit" id="submit-signup-button">
+                <input type="submit" role="button" class="btn btn-lg" value="Submit" id="submit-signup-button" onClick="return checkSignupForm()">
             </form>
         </div>
 
         <div class="login-form-container">
-            <form action="./forms/login.php" method="post" id="login-form">
+            <form action="./forms/login.php" method="post" id="login-form" name="loginForm">
                 <button type="button" class="btn-close" aria-label="Chiudi" id="close-login-form"></button>
 
                 <h1 style="color: #ff9102; font-weight: 800;">Accesso</h1>
 
                 <label for="email" style="float: left;">Email</label>
-                <input type="text" placeholder="Enter Email" name="email" autofocus required>
+                <input type="text" placeholder="nome@email.com" name="email" required>
 
                 <label for="psw" style="float: left;">Password</label>
-                <input type="password" placeholder="Enter Password" name="psw" required>
+                <input type="password" placeholder="Password" name="psw" required>
 
                 <input type="submit" class="btn btn-lg" value="Submit" id="submit-login-button">
             </form>
         </div>
         
         <div class="right-container">
-            <div class="tips-container">
+            <!--<div class="darkmode">
+                <input type="button" class="btn dark" id="darkmode-btn" value="">
+            </div>-->
+
+            <div class="near-me-container">
                 <h1 id="near-me-title">Vicino a me</h1>
-                <div class="near-me-container">
+                <div class="near-me-cards">
                     <a href="#" class="text-decoration-none"> 
-                        <h1 class="tip" id="tip-pill1">Hotel</h1>
+                        <h1 class="nm-card" id="nm1">Aeroporti</h1>
                     </a>
                     <a href="#" class="text-decoration-none">
-                        <h1 class="tip" id="tip-pill2">Ristoranti</h1>
+                        <h1 class="nm-card" id="nm2">Crociere</h1>
                     </a>
                     <a href="#" class="text-decoration-none">
-                        <h1 class="tip" id="tip-pill3">Attrazioni</h1>
+                        <h1 class="nm-card" id="nm3">Noleggio auto</h1>
+                    </a>
+                    <a href="#" class="text-decoration-none">
+                        <h1 class="nm-card" id="nm4">Hotel</h1>
+                    </a>
+                    <a href="#" class="text-decoration-none">
+                        <h1 class="nm-card" id="nm5">Case vacanza</h1>
+                    </a>
+                    <a href="#" class="text-decoration-none">
+                        <h1 class="nm-card" id="nm6">Ristoranti</h1>
                     </a>
                 </div>
             </div>
 
-            <div class="cats-container">
-                <h1 id="first-cat-title">Hotel</h1>
-                <div class="first-cat-container">
-                    <a href="#" class="text-decoration-none"> 
-                        <h1 class="category me-4" id="cat-pill1">Hotel 1</h1>
-                    </a>
-                    <a href="#" class="text-decoration-none"> 
-                        <h1 class="category me-4" id="cat-pill2">Hotel 2</h1>
-                    </a>
-                    <a href="#" class="text-decoration-none"> 
-                        <h1 class="category me-4" id="cat-pill3">Hotel 3</h1>
-                    </a>
-                    <a href="#" class="text-decoration-none"> 
-                        <h1 class="category me-4" id="cat-pill4">Hotel 4</h1>
-                    </a>
-                </div>
+            <div class="tips-container">
+                <!-- Suggerimenti che appariranno con la ricerca -->
             </div>
 
         </div>
