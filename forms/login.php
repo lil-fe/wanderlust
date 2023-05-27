@@ -1,6 +1,9 @@
 <?php
+    session_start();
+
     if ($_SERVER["REQUEST_METHOD"] != "POST") {
-        header("Location: /");
+        header("Location: ../index.html");
+        exit();
     } else {
         $dbconn = pg_connect("host=localhost user=postgres password=psql
             port=5432 dbname=Wanderlust")
@@ -20,8 +23,10 @@
                 $query = "SELECT * FROM users WHERE email=$1";
                 $result = pg_query_params($dbconn, $query, array($email));
                 if (!($tuple = pg_fetch_array($result, null, PGSQL_ASSOC))) {
-                    echo "Non ti sei ancora registrato.";
-                    return;
+                    // sostituire con alert
+                    $_SESSION["login_error"] = "Non ti sei ancora registrato";
+                    header("Location: ../index.html");
+                    exit();
                 }
 
                 //$pwd = password_hash($_POST["pwd"], PASSWORD_DEFAULT);
@@ -30,16 +35,22 @@
                 $query = "SELECT * FROM users WHERE email=$1 AND psw=$2";
                 $result = pg_query_params($dbconn, $query, array($email, $psw));
                 if (!($tuple = pg_fetch_array($result, null, PGSQL_ASSOC))) {
-                    echo "Password errata.";
-                    return;
+                    // sostituire con alert
+                    $_SESSION["Login_error"] = "Password errata.";
+                    header("Location: ..index.html");
+                    exit();
                 }
 
                 /* Blocco da eseguire in caso di successo. */
-                $username = $tuple["username"];
-                echo "Benvenuto $username.";
+                $_SESSION["logged_in"] = true;
+                $_SESSION["username"] = $tuple["username"];
+                header("Location: ../index.html");
+                exit();
+                /*$username = $tuple["username"];
+                echo "Benvenuto $username.";*/
             }
 
-            pg_free_result($res);
+            pg_free_result($result);
             pg_close($dbconn);
         ?>
     </body>

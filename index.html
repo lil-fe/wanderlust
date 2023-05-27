@@ -5,9 +5,10 @@
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <script src="./jquery-3.6.4.min.js"></script>
-        <script src="./bootstrap/js/bootstrap.min.js"></script>
+        <script src="./bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="./script.js"></script>
-        <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLh1xKvgc3eJDEk7dkv8unU9PejDfy9u0&callback=initMap"></script>
+        <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLh1xKvgc3eJDEk7dkv8unU9PejDfy9u0&callback=initMap"></script>  <!-- Maps API -->
+        <!--<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLh1xKvgc3eJDEk7dkv8unU9PejDfy9u0&libraries=places&callback=initMap">--></script>    <!-- Places API -->
         <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
         <link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" href="./style.css"/>
@@ -50,64 +51,98 @@
                 <h3 id="title">Wanderlust</h3>
             </a>
 
-            <h5 id="discover-subtitle">SCOPRI</h4>
+            <h5 class="subtitle">CERCA</h5>
             <ul>
-                <li><a class="nav text-decoration-none" href="#" id="search-pill">&#128269; Suggerimenti</a></li>
-                <li><a class="nav current text-decoration-none" href="#near-me-title" id="near-me-pill">&#128205; Vicino a me</a></li>
+                <li><a class="nav text-decoration-none" href="#" id="search-pill">&#128270; Ricerca luogo</a></li>
             </ul>
 
-            <h5 id="test-subtitle">CERCA</h5>
+            <h5 class="subtitle">SCOPRI</h4>
             <ul>
-                <li><a class="nav text-decoration-none" href="#" id="flights-pill">&#9992; Aeroporti</a></li>
-                <li><a class="nav text-decoration-none" href="#" id="cruises-pill">&#128755; Crociere</a></li>
-                <li><a class="nav text-decoration-none" href="#" id="cars-pill">&#128663; Noleggio auto</a></li>
-                <li><a class="nav text-decoration-none" href="#" id="hotels-pill">&#127976; Hotel</a></li>
-                <li><a class="nav text-decoration-none" href="#" id="vacations-pill">&#127968; Case vacanza</a></li>
-                <li><a class="nav text-decoration-none" href="#" id="restaurants-pill">&#127860; Ristoranti</a></li>
+                <li><a class="nav text-decoration-none" href="#" id="near-me-pill">&#128205; Vicino a me</a></li>
+                <li><a class="nav text-decoration-none" href="#" id="suggestions-pill">&#127829; Suggerimenti</a></li>
             </ul>
-            <!--<div class="btn-group">
-                <a href="#" class="dropdown-toggle show text-black text-decoration-none" data-bs-toggle="dropdown">
-                    <img src="./imgs/montagna.jpg" width="40" height="40" id="user-pic" class="rounded-circle">
-                    <strong>User</strong>
-                </a>
-                <ul class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Preferiti</a>
-                    <a class="dropdown-item" href="#">Esci</a>
-                </ul>
-            </div>-->
 
-            <h5 id="test-subtitle">PROFILO</h5>
+            <h5 class="subtitle">PROFILO</h5>
             <div class="user-buttons">
                 <input type="button" class="btn" value="Registrati" id="signup-button-lm">
                 <input type="button" class="btn" value="Accedi" id="login-button-lm">
             </div>
+            <div class="user-profile btn-group">
+                <input type="file" id="user-pic-input" style="display: none;" accept="image/*">
+                <a href="#" class="dropdown-toggle show text-black text-decoration-none" data-bs-toggle="dropdown">
+                    <img width="40" height="40" id="user-pic">
+                    <strong id="username-placeholder"><!-- Username --></strong>
+                </a>
+                <ul class="dropdown-menu">
+                    <a class="dropdown-item" href="#" id="favorites-link">Preferiti</a>
+                    <a class="dropdown-item" href="#" id="change-pic-link">Cambia immagine</a>
+                    <a class="dropdown-item" href="./forms/logout.php">Esci</a>
+                </ul>
+            </div>
+        </div>
+
+        <div class="favorites-list">
+            <button type="button" class="btn-close" aria-label="Chiudi" id="close-favorites-list"></button>
+            <h3 id="favorites-title">Preferiti</h3>
+        </div>
+
+        <!-- Alert per mappa -->
+        <div class="alert alert-danger" role="alert" id="void-search-alert">
+            <strong>Attenzione.</strong> La barra di ricerca non può essere vuota.
+        </div>
+
+        <!-- Alert per registrazione - regex -->
+        <div class="alert alert-danger signup-alerts" role="alert" id="username-alert">
+            L'<strong>username</strong> deve contenere da 3 a 20 caratteri alfanumerici e non deve contenere spazi.
+        </div>
+        <div class="alert alert-danger signup-alerts" role="alert" id="email-alert">
+            <strong>Email</strong> non valida.
+        </div>
+        <div class="alert alert-danger signup-alerts" role="alert" id="password-alert">
+            La <strong>password</strong> deve contenere da 6 a 20 caratteri alfanumerici.
+        </div>
+        
+        <!-- Alert per registrazione - Username, email già esistenti -->
+        <div class="alert alert-danger signup-alerts" role="alert" id="existing-username-alert">
+            <strong>Username</strong> già esistente.
+        </div>
+        <div class="alert alert-danger signup-alerts" role="alert" id="existing-email-alert">
+            <strong>Email</strong> già esistente.
+        </div>
+
+        <!-- Alert per preferiti -->
+        <div class="alert alert-danger favorites-alerts" role="alert" id="existing-favorite-alert">
+            Luogo già presente nella <strong>lista dei preferiti</strong>.
+        </div>
+        <div class="alert alert-success favorites-alerts" role="alert" id="successed-favorite-alert">
+            Luogo aggiunto alla <strong>lista dei preferiti</strong>.
         </div>
 
         <div class="search-bar-container">
-            <input type="text" id="search-bar" placeholder="Dove vuoi andare?" size="35">
+            <input type="text" id="search-bar">
             <input type="submit" role="button" class="btn" value="&#128269;" id="search-button">
         </div>
         
         <div class="map-container">
-            <div id="map"></div>
+            <div id="map">Spazio mappa</div>
         </div>
 
         <div class="signup-form-container">
             <form action="./forms/signup.php" method="post" id="signup-form" name="signupForm">
                 <button type="button" class="btn-close" aria-label="Chiudi" id="close-signup-form"></button>
                 
-                <h1 style="color: #9e44f3; font-weight: 800;">Registrazione</h1>
+                <h3 style="color: #005bbb; font-weight: 800;">Registrazione</h3>
 
                 <label for="username" style="float: left;">Username</label>
-                <input type="text" placeholder="Da 3 a 20 caratteri alfanumerici. Simboli: -_." name="username" maxlength="20" required>
+                <input type="text" placeholder="3-20 caratteri. Simboli: -_." name="username"  id="username" maxlength="20" required>
 
                 <label for="email" style="float: left;">Email</label>
                 <input type="text" placeholder="nome@email.com" name="email" maxlength="40" required>
 
                 <label for="psw" style="float: left;">Password</label>
-                <input type="password" placeholder="Da 6 a 20 caratteri alfanumerici. Simboli: -_.!?$&" name="psw" maxlength="20" required>
+                <input type="password" placeholder="6-20 caratteri. Simboli: -_.!?$&" name="psw" maxlength="20" required>
 
-                <input type="submit" role="button" class="btn btn-lg" value="Submit" id="submit-signup-button" onClick="return checkSignupForm()">
+                <input type="submit" role="button" class="btn btn-lg" value="Registrati" id="submit-signup-button" onClick="return checkSignupForm()">
             </form>
         </div>
 
@@ -115,7 +150,7 @@
             <form action="./forms/login.php" method="post" id="login-form" name="loginForm">
                 <button type="button" class="btn-close" aria-label="Chiudi" id="close-login-form"></button>
 
-                <h1 style="color: #ff9102; font-weight: 800;">Accesso</h1>
+                <h1 style="color: #ffd500; font-weight: 800;">Accesso</h1>
 
                 <label for="email" style="float: left;">Email</label>
                 <input type="text" placeholder="nome@email.com" name="email" required>
@@ -123,7 +158,7 @@
                 <label for="psw" style="float: left;">Password</label>
                 <input type="password" placeholder="Password" name="psw" required>
 
-                <input type="submit" class="btn btn-lg" value="Submit" id="submit-login-button">
+                <input type="submit" class="btn btn-lg" value="Accedi" id="submit-login-button">
             </form>
         </div>
         
@@ -132,7 +167,12 @@
                 <input type="button" class="btn dark" id="darkmode-btn" value="">
             </div>-->
 
-            <div class="near-me-container">
+            <div class="search-location-container">
+                <!-- Luoghi che appariranno con "Ricerca luogo" -->
+            </div>
+
+            <!-- DA RIFARE -->
+            <!--<div class="near-me-container">
                 <h1 id="near-me-title">Vicino a me</h1>
                 <div class="near-me-cards">
                     <a href="#" class="text-decoration-none"> 
@@ -153,11 +193,12 @@
                     <a href="#" class="text-decoration-none">
                         <h1 class="nm-card" id="nm6">Ristoranti</h1>
                     </a>
-                </div>
-            </div>
+                </div>-->
+                <!-- Luoghi che appariranno con "Vicino a me" -->
+            <!--</div>-->
 
-            <div class="tips-container">
-                <!-- Suggerimenti che appariranno con la ricerca -->
+            <div class="suggestions-container">
+                <!-- Luoghi che appariranno con "Suggerimenti" -->
             </div>
 
         </div>

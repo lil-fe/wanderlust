@@ -9,19 +9,22 @@
 !!! Aggiungere il controllo di correttezza dei form.
 !!! Aggiungere la mappa.
 !!! (Versione Desktop) Cambio di layout.
->>> Impostare la pagina di redirect alla home dopo registrazione/accesso.
->>> Aggiungere il profilo utente una volta loggato.
-    Aggiungere poi la funzione di logout.
->>> Cambiare il cerca con un autocomplete per suggerimenti.
+!!! Aggiungere controlli alla barra di ricerca con gli alert personalizzati di bootstrap.
+    Cambiare anche gli alert classici dei form con quelli di bootstrap.
+!!! Impostare la pagina di redirect alla home dopo registrazione/accesso.
+!!! Cambiare il cerca con un autocomplete per suggerimenti.
     Aggiungere il check: se il campo è vuoto non inviare nessuna richiesta.
     Il click al singolo suggerimento deve impostare la mappa sull'apposito marker.
-    Aggiungere una funzionalità nelle infoWindow collegate ai marker (prenotazione/preferiti).
->>> Implementare "vicino a me".
-    Al click su una scheda di una categoria evidenziare i marker sulla mappa con locations/v2/list-nearby.
-    Ogni infoWindow deve riportare il nome del posto, una foto, la distanza e la valutazione.
->>> (Versione Mobile) Aggiungere la sezione "cerca" sotto la navbar.
-    Idea: 6 pulsanti tondi con solamente un'emoji dentro per guadagnare spazio.
->>> (Versione Mobile) Rivedere completamente gli elementi in base alla larghezza della finestra.
+!!! Aggiungere il profilo utente una volta loggato (con possibilità di logout).
+!!! Aggiungere la possibilità di caricare l'immagine di profilo.
+>>> Aggiungere i preferiti.
+    ### Se non si è loggati, cliccando su "aggiungi ai preferiti" si apre il form di login.
+    ### Alert rosso nel caso in cui il luogo sia già tra i preferiti, alert verde altrimenti.
+    ### Tasto per chiudere la lista dei preferiti.
+    Tasto per cancellare luogo dalla lista dei preferiti.
+    Cliccando su un preferito viene visualizzato il marker sulla mappa.
+>>> Aggiungere Vicino a me e Suggerimenti con Places API.
+>>> (Versione Mobile) Rifare da capo.
 ----------------------------
 
 -------- Idee --------
@@ -30,11 +33,14 @@
     Documentazione: https://getbootstrap.com/docs/5.0/components/modal/
 !!! (Versione Desktop) Cambio apertura form.
 !!! Cambiare i placeholder per i campi dei form per dire all'utente cosa inserire.
+>>> Aggiungere gli alert in caso di registrazione/accesso falliti.
+    Registrazione con successo: alert verde "Registrazione avvenuta con successo".
+    Registrazione fallita: alert rosso "Registrazione fallita".
+    Login con successo: sostituzione pulsanti form con profilo utente (immagine circle, nome utente, dropdown menu).
+    Login fallito: alert rosso "Accesso fallito".
 >>> Permettere l'accesso sia con email che con username.
 >>> Utilizzare un algoritmo di hashing per le password.
 >>> Aggiungere la dark mode.
->>> Aumentare la dimensione della mappa in favore del right-container.
-    Aumentare di conseguenza le immagini collegate ai marker (da 2 a 4).
 ----------------------
 
 -------- Fix --------
