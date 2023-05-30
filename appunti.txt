@@ -19,12 +19,12 @@
 !!! Aggiungere la possibilità di caricare l'immagine di profilo.
 >>> Aggiungere i preferiti.
     ### Se non si è loggati, cliccando su "aggiungi ai preferiti" si apre il form di login.
-    ### Alert rosso nel caso in cui il luogo sia già tra i preferiti, alert verde altrimenti.
     ### Tasto per chiudere la lista dei preferiti.
-    Tasto per cancellare luogo dalla lista dei preferiti.
+    ### Tasto per cancellare luogo dalla lista dei preferiti.
+    ### Alert rosso nel caso in cui il luogo sia già tra i preferiti, alert verde altrimenti.
     Cliccando su un preferito viene visualizzato il marker sulla mappa.
 >>> Aggiungere Vicino a me e Suggerimenti con Places API.
->>> (Versione Mobile) Rifare da capo.
+>>> Aggiungere responsività.
 ----------------------------
 
 -------- Idee --------

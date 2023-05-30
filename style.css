@@ -42,8 +42,10 @@ body {
     display: none;
     position: absolute;
     max-width: 400px;
-    left: 470px;
+    width: 100%;
+    left: 400px;
     top: 0px;
+    text-align: center;
 
     transition: all 0.3s ease;
 }
@@ -499,7 +501,7 @@ ul {
     transform: scale(0.0);
 }
 
-.near-me-container {
+/*.near-me-container {
     margin-top: 20px;
     text-align: center;
 }
@@ -539,7 +541,7 @@ ul {
 
 .nm-card:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
-}
+}*/
 
 .search-location-container {
     display: inline-block;
@@ -562,12 +564,12 @@ ul {
     background: #b4b3b3;
 }
 
-#tips-title {
+#search-location-title {
     font-size: 2.5em;
     font-weight: 1000;
 }
 
-.tips-cards {
+.search-location-cards {
     display: flex;
     flex-flow: row nowrap;
     overflow-x: auto;
@@ -580,7 +582,7 @@ ul {
     transition: all 0.3s ease;
 }
 
-.tip {
+.location {
     color: #ffffff;
     display: inline-block;
     /*white-space: nowrap;*/    /* Non fa andare a capo la scritta all'interno delle schede */
@@ -597,7 +599,7 @@ ul {
     transition: transform 0.2s ease;
 }
 
-.tip:hover {
+.location:hover {
     transform: scale(1.05);
     /*color: transparent;*/
     filter: blur(0px);
@@ -634,16 +636,16 @@ ul {
 
 .favorites-list {
     position: absolute;
-    display: flex;
-    flex-flow: column nowrap;
+    display: none;
     max-width: 260px;
     width: 100%;
-    height: fit-content;
+    max-height: max-content;
+    margin-bottom: 20px;
     left: 30px;
     top: 100vh;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     border-radius: 30px;
-    padding: 30px;
+    padding: 10px;
     
     transition: all 0.4s ease;
 }
@@ -652,6 +654,7 @@ ul {
     font-weight: 1000;
     font-size: 1.5em;
     text-align: left;
+    margin: 10px auto auto 10px;
 }
 
 #close-favorites-list {
@@ -672,6 +675,51 @@ ul {
 #close-favorites-list:focus {
     outline: none !important;
     box-shadow: none;
+}
+
+.favorites-cards {
+    display: block;
+    max-height: 650px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    padding: 20px;
+    align-items: center;
+
+    transition: all 0.3s ease;
+}
+
+.favorite {
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 40px;
+    background-size: cover;
+    background-position: center;
+    width: 200px;
+    height: 65px;
+    font-size: 1em;
+    font-weight: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+    transition: transform 0.2s ease;
+}
+
+.favorite:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+#delete-favorite-button {
+    width: 10px;
+    height: 10px;
+    margin-left: 10px;
+    background-color: rgb(255, 47, 47);
+    border-radius: 30px;
+
+    transition: all 0.1s ease;
 }
 
 /* --------------------------------------*/

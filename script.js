@@ -1,6 +1,8 @@
+const MAX_NAME_LENGTH = 11;
+
 $(document).ready(function() {
-    /*(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
-        ({key: "AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg", v: "weekly"});*/
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
+        ({key: "AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg", v: "weekly"});
 
     // controlla se l'utente è loggato
     checkLoginStatus();
@@ -62,6 +64,25 @@ $(document).ready(function() {
     $(".nav").on("click", function() {
         setCurrentPill($(this).attr("id"));
         toggleSearchBarLM();
+    });
+
+    $("#search-button").on("click", () => {
+        var searchText = document.getElementById("search-bar").value;
+        // ridimensionamento search-bar e map per far apparire il right container
+        if (!handleEmptySearch(searchText)) {
+            $("#search-bar").css("width", "480px");
+            $("#map").css("max-width", "550px").css("height", "550px");
+            $(".right-container").css("transform", "scale(1.0)");
+            $("#void-search-alert").css("left", "380px");
+        }
+        
+        if ($("#search-pill").hasClass("current")) { // ricerca luogo
+            searchLocation(searchText);
+        } else if ($("#near-me-pill").hasClass("current")) { // vicino a me
+            requestNearMe(pos, searchText);
+        } else if ($("#suggestions-pill").hasClass("current")) { // suggerimenti
+            requestSuggestion(searchText);
+        }        
     });
 
     /* Gestione search-bar del top-menu */
@@ -362,7 +383,41 @@ function checkLoginStatus() {
                     $("#user-pic").attr("src", savedImageUrl);
 
                 // Controlla se esiste una lista dei preferiti associata all'username loggato
-                
+                if (!isFavoritesListEmpty()) {
+                    $("#favorites-placeholder").css("display", "none");
+                    const favoritesKey = "favorites_" + profileUsername;
+                    let favorites = JSON.parse(localStorage.getItem(favoritesKey));
+                    let favoritesContainer = document.querySelector(".favorites-cards");
+                    for (let i=0; i < favorites.length; i++) {
+                        let favorite = favorites[i];
+                        favorite.index = i;
+
+                        // Tronca il nome se necessario
+                        if (favorite.name.length > MAX_NAME_LENGTH) {
+                            favorite.name = favorite.name.substring(0, MAX_NAME_LENGTH) + "...";
+                        }
+
+                        let favoriteCard = document.createElement("div");
+                        favoriteCard.classList.add("favorite", "mb-3");
+                        favoriteCard.style.backgroundImage = `url(${favorite.imgUrl})`;
+                        favoriteCard.textContent = favorite.name;
+                        // per getFavoriteData()
+                        favoriteCard.dataset.img = favorite.imgUrl;
+                        favoriteCard.dataset.venue = favorite.venue;
+                        favoriteCard.dataset.latitude = favorite.latitude;
+                        favoriteCard.dataset.longitude = favorite.longitude;
+
+                        let deleteButton = document.createElement("button");
+                        deleteButton.setAttribute("type", "button");
+                        deleteButton.setAttribute("class", "btn-close");
+                        deleteButton.setAttribute("id", "delete-favorite-button");
+                        deleteButton.setAttribute("aria-label", "Elimina preferito");
+                        deleteButton.addEventListener("click", () => deleteFavorite(i));
+
+                        favoriteCard.appendChild(deleteButton);
+                        favoritesContainer.appendChild(favoriteCard);
+                    }
+                }
             } else {
                 showFormButtons();
             }
@@ -443,7 +498,6 @@ function toggleMap() {
 
 
 let settings;
-
 function searchLocation(input) {
     //handleEmptySearch(input);
     
@@ -483,6 +537,9 @@ function searchLocation(input) {
                 '</div>' +
                 '<h7 style="color: #8b8b8b">' + firstResVenue + '</h7><br/>' +
                 '<a href="#" id="add-favorite">Aggiungi ai preferiti</a>' +
+                '<p style="display: none"; id="lat">' + firstResLat + '</p>' +
+                '<p style="display: none"; id="lng">' + firstResLng + '</p>' +
+                '<p style="display: none"; id="latLng">' + firstResLatLng + '</p>' +
                 '</div>';
             const infoWindow = new google.maps.InfoWindow({
                 content: contentString,
@@ -508,10 +565,10 @@ function searchLocation(input) {
         
         // creazione schede di tutti i luoghi
         let title = document.createElement("h1");
-        title.id = "tips-title";
+        title.id = "search-location-title";
         title.textContent = input;
         let cardsContainer = document.createElement("div");
-        cardsContainer.classList.add("tips-cards");
+        cardsContainer.classList.add("search-location-cards");
         for (var i=0; i < res.length; i++) {
             if (res[i].__typename == "Typeahead_LocationItem" && res[i].detailsV2.geocode !== null) {
                 var iRes = res[i].detailsV2;
@@ -529,24 +586,105 @@ function searchLocation(input) {
                 card.href = "#";
                 card.classList.add("text-decoration-none");
                 // gestione click sulle schede
-                let cardClickhandler = createCardClickHandler(i, iName, iVenue, iMarkerImg, iLat, iLng, iLatLng);
-                card.addEventListener("click", cardClickhandler);
-                card.dataset.index = i;
+                let cardClickHandler = createCardClickHandler(i, iName, iVenue, iMarkerImg, iLat, iLng, iLatLng);
+                card.addEventListener("click", cardClickHandler);
+                card.dataset.index = i; // l'attributo dataset consente di accedere ad attributi aggiuntivi data-attributo_aggiuntivo (in questo caso data-index)
                 
                 let cardTitle = document.createElement("h1");
                 cardTitle.textContent = iName;
-                cardTitle.classList.add("tip", "me-4");
-                cardTitle.id = "tip" + i;
+                cardTitle.classList.add("location", "me-4");
+                cardTitle.id = "location" + i;
                 cardTitle.style.backgroundImage = `url(${iCardImg})`;
 
                 card.appendChild(cardTitle);
                 cardsContainer.appendChild(card);
             }
         }
-        let tipsContainer = document.querySelector(".search-location-container");
-        tipsContainer.appendChild(title);
-        tipsContainer.appendChild(cardsContainer);
+        let locationsContainer = document.querySelector(".search-location-container");
+        locationsContainer.appendChild(title);
+        locationsContainer.appendChild(cardsContainer);
     });
+}
+
+function animateMarker(marker) {
+    marker.setAnimation(google.maps.Animation.DROP);
+}
+
+function createCardClickHandler(index, name, venue, markerImg, lat, lng, latLng) {
+    return function(event) {
+        handleSearchLocation(index, name, venue, markerImg, lat, lng, latLng);
+    }
+}
+
+// Gestione schede ricerca luogo
+function handleSearchLocation(i, name, venue, markerImg, lat, lng, latLng) {
+    const contentString =
+        '<div class="marker-content" style="text-align: center;">' +
+        '<h5 style="font-weight: 800;">' + name + '</h5>' +
+        '<div class="mb-2">' +
+        '<img src="' + markerImg + '" class="marker-img">' +
+        '</div>' +
+        '<h7 style="color: #8b8b8b">' + venue + '</h7><br/>' +
+        '<a href="#" id="add-favorite">Aggiungi ai preferiti</a>' +
+        '<p style="display: none"; id="lat">'+ lat + '</p>' +
+        '<p style="display: none"; id="lng">' + lng + '</p>' +
+        '<p style="display: none"; id="latLng">' + latLng + '</p>' +
+        '</div>';
+    const infoWindow = new google.maps.InfoWindow({
+        content: contentString,
+        ariaLabel: name,
+    });
+
+    // marker
+    const marker = new google.maps.Marker({
+        map,
+        title: name,
+        position: { lat: lat, lng: lng },
+        animation: null,
+    });
+    marker.addListener("click", () => {
+        infoWindow.open({
+            map,
+            anchor: marker, // collega la infoWindow al marker
+        });
+    });
+    animateMarker(marker);
+    map.setCenter(latLng);
+}
+
+// Gestione near me
+/*function requestNearMe(pos, input) {
+    $.ajax({
+        url: `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522%2C151.1957362&radius=1500&type=restaurant&keyword=cruise&key=AIzaSyDLh1xKvgc3eJDEk7dkv8unU9PejDfy9u0`,
+        type: "GET",
+        dataType: "json",
+        success: function(response) {
+            console.log(JSON.stringify(response.data));
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}*/
+
+// Gestione suggerimenti
+function requestSuggestion(input) {
+    //handleEmptySearch(input);
+
+    //...
+}
+
+function handleEmptySearch(input) {
+    if (input == "") {
+        showAlert("void-search-alert");
+        setTimeout(function() {
+            $("#void-search-alert").fadeOut(250);
+            $("#void-search-alert").css("top", "0px");
+            $("#map").css("top", "110px");
+        }, 3000);
+        return true;
+    }
+    return false;
 }
 
 function showAlert(alertId) {
@@ -574,51 +712,157 @@ function showAlert(alertId) {
     }
 }
 
-function animateMarker(marker) {
-    marker.setAnimation(google.maps.Animation.DROP);
-}
 
-function createCardClickHandler(index, name, venue, markerImg, lat, lng, latLng) {
-    return function(event) {
-        handleSearchLocation(index, name, venue, markerImg, lat, lng, latLng);
-    }
-}
 
-// Gestione near me
-function requestNearMe(input) {
-    //handleEmptySearch(input);
+/* -------- Preferiti -------- */
+$(document).ready(() => {
+    // Controlla che la lista dei preferiti non sia vuota per eliminare il placeholder
+    if (!isFavoritesListEmpty())
+        $("#favorites-placeholder").css("display", "none");
 
-    //...
-}
-
-// Gestione suggerimenti
-function requestSuggestion(input) {
-    //handleEmptySearch(input);
-
-    //...
-}
-
-// Gestione schede ricerca luogo
-function handleSearchLocation(i, name, venue, markerImg, lat, lng, latLng) {
-    const contentString =
-        '<div class="marker-content" style="text-align: center;">' +
-        '<h5 style="font-weight: 800;">' + name + '</h5>' +
-        '<div class="mb-2">' +
-        '<img src="' + markerImg + '" class="marker-img">' +
-        '</div>' +
-        '<h7 style="color: #8b8b8b">' + venue + '</h7>' +
-        '<a href="#" id="add-favorite">Aggiungi ai preferiti</a>' +
-        '</div>';
-    const infoWindow = new google.maps.InfoWindow({
-        content: contentString,
-        ariaLabel: name,
+    // Click su "Preferiti" dal dropdown menu
+    $("#favorites-link").on("click", () => {
+        $(".left-menu").css("margin-top", "-400px");
+        $(".favorites-list").fadeIn(1);
+        $(".favorites-list").css("top", "20vh");
     });
 
-    // marker
+    // click su "Aggiungi ai preferiti" dalla infoWindow
+    $(document).on("click", "#add-favorite", function(event) {
+        // Recupera nome e url dell'imagine del luogo sul quale si clicca "Aggiungi ai preferiti"
+        let name = $(this).closest(".marker-content").find("h5").text();
+        let imgUrl = $(this).closest(".marker-content").find(".marker-img").attr("src");
+        console.log(imgUrl);
+        let venue = $(this).closest(".marker-content").find("h7").text();
+        let latitude = $(this).closest(".marker-content").find("p#lat").text();
+        let longitude = $(this).closest(".marker-content").find("p#lng").text();
+        //let latLng = $(this).closest(".marker-content").find("p#latLng").text();
+        addFavorite(name, imgUrl, venue, latitude, longitude);
+    });
+
+    // Click sul bottone per chiudere la lista dei preferiti
+    $("#close-favorites-list").on("click", () => {
+        $(".left-menu").css("margin-top", "20px");
+        $(".favorites-list").css("top", "100vh");
+        $(".favorites-list").fadeOut();
+    });
+
+    // Click sui preferiti
+    $(".favorites-cards").on("click", ".favorite", function(event) {
+        let favoriteData = getFavoriteData(event.target);
+        showFavoriteOnMap(favoriteData);
+    });
+});
+
+function addFavorite(name, imgUrl, venue, latitude, longitude) {
+    /*console.log(venue);
+    console.log(latitude);
+    console.log(longitude);*/
+    // Se l'utente non è loggato -> si apre il form di accesso
+    if (!loggedIn) {
+        toggleLoginFormLM();
+        return;
+    }
+
+    // Se luogo già presente nei preferiti -> alert rosso e uscita dalla funzione
+    if (isPlaceInFavorites(name, imgUrl)) {
+        showAlert("existing-favorite-alert");
+        setTimeout(function() {
+            $("#existing-favorite-alert").fadeOut(250);
+            $("#existing-favorite-alert").css("top", "0px");
+            $("#map").css("top", "110px");
+        }, 3000);
+        return;
+    } else {
+        showAlert("successed-favorite-alert");
+        setTimeout(function() {
+            $("#successed-favorite-alert").fadeOut(250);
+            $("#successed-favorite-alert").css("top", "0px");
+            $("#map").css("top", "110px");
+        }, 3000);
+    }
+
+    // Creazione preferito e aggiunta alla lista
+    $("#favorites-placeholder").css("display", "none");
+    let favoritesContainer = document.querySelector(".favorites-cards");
+    let favoriteCard = document.createElement("div");
+    favoriteCard.classList.add("favorite", "mb-3");
+    favoriteCard.style.backgroundImage = `url(${imgUrl})`;
+    // per getFavoriteData()
+    favoriteCard.setAttribute("data-img", imgUrl);
+    favoriteCard.setAttribute("data-venue", venue);
+    favoriteCard.setAttribute("data-latitude", latitude);
+    favoriteCard.setAttribute("data-longitude", longitude);
+    if (name.length > MAX_NAME_LENGTH)
+        name = name.substring(0, MAX_NAME_LENGTH) + '...';
+    favoriteCard.textContent = name;
+
+    let deleteButton = document.createElement("button");
+    deleteButton.setAttribute("type", "button");
+    deleteButton.setAttribute("class", "btn-close");
+    deleteButton.setAttribute("id", "delete-favorite-button");
+    deleteButton.setAttribute("aria-label", "Elimina preferito");
+
+    favoriteCard.appendChild(deleteButton);
+    favoritesContainer.appendChild(favoriteCard);
+
+    // Salvataggio nel localStorage
+    const favoritesKey = "favorites_" + profileUsername;    // chiave univoca per ogni utente corrispondente all'array dei preferiti
+    let favorites = JSON.parse(localStorage.getItem(favoritesKey)) || [];
+    const favorite = { name, imgUrl, venue, latitude, longitude };
+    favorites.push(favorite);   // aggiunge l'oggetto favorite all'array favorites
+    localStorage.setItem(favoritesKey, JSON.stringify(favorites));  // sovrascrive l'array favorites corrispondente alla chiave favoritesKey
+
+    deleteButton.setAttribute("data-index", favorites-length);
+    deleteButton.addEventListener("click", () => deleteFavorite(favorites.length-1));
+}
+
+function deleteFavorite(favoriteIndex) {
+    const favoritesKey = "favorites_" + profileUsername;
+    let favorites = JSON.parse(localStorage.getItem(favoritesKey));
+
+    // Rimozione preferito dal localStorage
+    favorites.splice(favoriteIndex, 1);
+    localStorage.setItem(favoritesKey, JSON.stringify(favorites));
+
+    // Rimozione preferito dalla lista
+    let favoriteCards = document.querySelectorAll(".favorite");
+    favoriteCards[favoriteIndex].remove();
+}
+
+function isFavoritesListEmpty() {
+    const favoritesKey = "favorites_" + profileUsername;
+    const favorites = JSON.parse(localStorage.getItem(favoritesKey));
+    return !favorites || favorites.length === 0;
+}
+
+function isPlaceInFavorites(name, imgUrl, venue, latitude, longitude) {
+    const favoritesKey = "favorites_" + profileUsername;
+    const favorites = JSON.parse(localStorage.getItem(favoritesKey)) || [];
+    return favorites.some(favorite => favorite.name === name && favorite.imgUrl === imgUrl && favorite.latitude === latitude && favorite.longitude === longitude && favorite.venue === venue);
+    // some verifica se almeno un elemento dell'array soddisfa una condizione. Si ferma al primo.
+}
+
+function getFavoriteData(favorite) {
+    return {
+        name: $(favorite).text(),
+        imgUrl: $(favorite).data("img"),
+        venue: $(favorite).data("venue"),
+        latitude: $(favorite).data("latitude"),
+        longitude: $(favorite).data("longitude")
+    };
+}
+
+function showFavoriteOnMap(favoriteData) {
+    // Creazione del marker 
+    console.log({
+        favoriteData,
+    });
+    const latLng = new google.maps.LatLng(favoriteData.latitude, favoriteData.longitude);
     const marker = new google.maps.Marker({
         map,
-        title: name,
-        position: { lat: lat, lng: lng },
+        title: favoriteData.name,
+        position: latLng,
         animation: null,
     });
     marker.addListener("click", () => {
@@ -629,84 +873,26 @@ function handleSearchLocation(i, name, venue, markerImg, lat, lng, latLng) {
     });
     animateMarker(marker);
     map.setCenter(latLng);
-}
 
-function handleEmptySearch(input) {
-    if (input == "") {
-        showAlert("void-search-alert");
-        setTimeout(function() {
-            $("#void-search-alert").fadeOut(250);
-            $("#void-search-alert").css("top", "0px");
-            $("#map").css("top", "110px");
-        }, 3000);
-        return true;
-    }
-    return false;
-}
-
-$(document).ready(() => {
-    $("#search-button").on("click", () => {
-        var searchText = document.getElementById("search-bar").value;
-        // ridimensionamento search-bar e map per far apparire il right container
-        if (!handleEmptySearch(searchText)) {
-            $("#search-bar").css("width", "480px");
-            $("#map").css("max-width", "550px").css("height", "550px");
-            $(".right-container").css("transform", "scale(1.0)");
-            $("#void-search-alert").css("left", "380px");
-        }
-        
-        if ($("#search-pill").hasClass("current")) { // ricerca luogo
-            searchLocation(searchText);
-        } else if ($("#near-me-pill").hasClass("current")) { // vicino a me
-            requestNearMe(searchText);
-        } else if ($("#suggestions-pill").hasClass("current")) { // suggerimenti
-            requestSuggestion(searchText);
-        }        
-    });
-});
-
-
-
-/* -------- Preferiti -------- */
-$(document).ready(() => {
-    // click su "Preferiti" dal dropdown menu
-    $("#favorites-link").on("click", () => {
-        $(".left-menu").css("margin-top", "-400px");
-        $(".favorites-list").css("top", "20vh");
+    // Creazione infoWindow
+    const contentString = `
+        <div class="marker-content" style="text-align: center;">
+            <h5 style="font-weight: 800;">${favoriteData.name}</h5>
+            <div class="mb-2">
+                <img src="${favoriteData.imgUrl}" class="marker-img">
+            </div>
+            <h7 style="color: #8b8b8b;">${favoriteData.venue}</h7><br/>
+        </div>
+    `;
+    const infoWindow = new google.maps.InfoWindow({
+        content: contentString,
     });
 
-    // click su "Aggiungi ai preferiti" dalla infoWindow
-    $(document).on("click", "#add-favorite", function(event) {
-        event.preventDefault();
-        // se l'utente non è loggato -> si apre il form di accesso
-        if (!loggedIn) {
-            toggleLoginFormLM();
-        }
-        
-        // se luogo già presente nei preferiti -> alert rosso
-        showAlert("existing-favorite-alert");
-        setTimeout(function() {
-            $("#existing-favorite-alert").fadeOut(250);
-            $("#existing-favorite-alert").css("top", "0px");
-            $("#map").css("top", "110px");
-        }, 3000);
-
-        // se luogo non presente nei preferiti -> alert verde
-        showAlert("successed-favorite-alert");
-        setTimeout(function() {
-            $("#successed-favorite-alert").fadeOut(250);
-            $("#successed-favorite-alert").css("top", "0px");
-            $("#map").css("top", "110px");
-        }, 3000);
+    // Mostra l'infoWindow quando si clicca sul marker
+    marker.addListener("click", () => {
+        infoWindow.open(map, marker);
     });
 
-    // click sul bottone per chiudere la lista dei preferiti
-    $("#close-favorites-list").on("click", () => {
-        $(".left-menu").css("margin-top", "20px");
-        $(".favorites-list").css("top", "100vh");
-    });
-});
-
-function addFavorite(place) {
-    
+    // Mostra l'infoWindow immediatamente dopo aver creato il marker
+    infoWindow.open(map, marker);
 }

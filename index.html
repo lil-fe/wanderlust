@@ -7,9 +7,9 @@
         <script src="./jquery-3.6.4.min.js"></script>
         <script src="./bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="./script.js"></script>
-        <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLh1xKvgc3eJDEk7dkv8unU9PejDfy9u0&callback=initMap"></script>  <!-- Maps API -->
-        <!--<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLh1xKvgc3eJDEk7dkv8unU9PejDfy9u0&libraries=places&callback=initMap">--></script>    <!-- Places API -->
-        <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+        <!--<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLh1xKvgc3eJDEk7dkv8unU9PejDfy9u0&callback=initMap"></script>-->  <!-- Maps API -->
+        <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLh1xKvgc3eJDEk7dkv8unU9PejDfy9u0&libraries=places&callback=initMap"></script>    <!-- Places API -->
+        <!--<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>-->
         <link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" href="./style.css"/>
     </head>
@@ -25,10 +25,6 @@
                         <input type="button" class="btn" value="Registrati" id="signup-button">
                         <input type="button" class="btn" value="Accedi" id="login-button">
                     </div>
-
-                    <!--<div id="user-pic">
-                        <img src="./imgs/montagna.jpg" alt="" class="rounded-circle" width="40" height="40">
-                    </div>-->
 
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -84,6 +80,10 @@
         <div class="favorites-list">
             <button type="button" class="btn-close" aria-label="Chiudi" id="close-favorites-list"></button>
             <h3 id="favorites-title">Preferiti</h3>
+            <div class="favorites-cards">
+                <!-- Preferiti che appariranno cliccando su "Aggiungi ai preferiti" -->
+                <h7 style="color: #777777;" id="favorites-placeholder">Non hai ancora aggiunto nessun preferito alla tua lista.</h7>
+            </div>
         </div>
 
         <!-- Alert per mappa -->
@@ -163,44 +163,20 @@
         </div>
         
         <div class="right-container">
-            <!--<div class="darkmode">
-                <input type="button" class="btn dark" id="darkmode-btn" value="">
-            </div>-->
-
             <div class="search-location-container">
                 <!-- Luoghi che appariranno con "Ricerca luogo" -->
             </div>
 
             <!-- DA RIFARE -->
-            <!--<div class="near-me-container">
-                <h1 id="near-me-title">Vicino a me</h1>
-                <div class="near-me-cards">
-                    <a href="#" class="text-decoration-none"> 
-                        <h1 class="nm-card" id="nm1">Aeroporti</h1>
-                    </a>
-                    <a href="#" class="text-decoration-none">
-                        <h1 class="nm-card" id="nm2">Crociere</h1>
-                    </a>
-                    <a href="#" class="text-decoration-none">
-                        <h1 class="nm-card" id="nm3">Noleggio auto</h1>
-                    </a>
-                    <a href="#" class="text-decoration-none">
-                        <h1 class="nm-card" id="nm4">Hotel</h1>
-                    </a>
-                    <a href="#" class="text-decoration-none">
-                        <h1 class="nm-card" id="nm5">Case vacanza</h1>
-                    </a>
-                    <a href="#" class="text-decoration-none">
-                        <h1 class="nm-card" id="nm6">Ristoranti</h1>
-                    </a>
-                </div>-->
-                <!-- Luoghi che appariranno con "Vicino a me" -->
-            <!--</div>-->
+            <!--<div class="near-me-container">-->
+                <!-- <hr/> -->
+                <!--<h1 id="near-me-title">Vicino a me</h1>
+                Luoghi che appariranno con "Vicino a me"
+            </div>-->
 
             <div class="suggestions-container">
                 <!-- Luoghi che appariranno con "Suggerimenti" -->
             </div>
-
         </div>
     </body>
 </html>
