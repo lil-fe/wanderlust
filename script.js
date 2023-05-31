@@ -202,20 +202,20 @@ function toggleSignupForm() {
     if ($("#signup-button").css("padding") == "10px 20px") {
         $("#signup-button").css("padding", "10px 60px");
         $("#login-button").css("padding", "10px 10px");
-        $(".signup-form-container").fadeIn();   // fadeIn
+        $(".signup-form-container").fadeIn();
         $(".signup-form-container").css("transform", "scale(1.0)");
     /* form aperto */
     } else if ($("#signup-button").css("padding") == "10px 60px") {
         $("#signup-button").css("padding", "10px 20px");
         $("#login-button").css("padding", "10px 30px");
-        $(".signup-form-container").fadeOut();   // fadeOut
+        $(".signup-form-container").fadeOut();
         $(".signup-form-container").css("transform", "scale(0.0)");
     } else {    // login form aperto
         $("#signup-button").css("padding", "10px 60px");
         $("#login-button").css("padding", "10px 10px");
-        $(".login-form-container").fadeToggle(1);
+        $(".login-form-container").fadeOut(1);
         $(".login-form-container").css("transform", "scale(0.0)");
-        $(".signup-form-container").fadeToggle();
+        $(".signup-form-container").fadeIn();
         $(".signup-form-container").css("transform", "scale(1.0)");
     }
 }
@@ -230,20 +230,20 @@ function toggleLoginForm() {
     if ($("#login-button").css("padding") == "10px 30px") {
         $("#login-button").css("padding", "10px 60px");
         $("#signup-button").css("padding", "10px 10px");
-        $(".login-form-container").fadeToggle();
+        $(".login-form-container").fadeIn();
         $(".login-form-container").css("transform", "scale(1.0)");
     /* login form aperto */
     } else if ($("#login-button").css("padding") == "10px 60px") {
         $("#login-button").css("padding", "10px 30px");
         $("#signup-button").css("padding", "10px 20px");
-        $(".login-form-container").fadeToggle();
+        $(".login-form-container").fadeOut();
         $(".login-form-container").css("transform", "scale(0.0)");
     } else {    // signup form aperto
         $("#login-button").css("padding", "10px 60px");
         $("#signup-button").css("padding", "10px 10px");
-        $(".signup-form-container").fadeToggle(1);
+        $(".signup-form-container").fadeOut(1);
         $(".signup-form-container").css("transform", "scale(0.0)");
-        $(".login-form-container").fadeToggle();
+        $(".login-form-container").fadeIn();
         $(".login-form-container").css("transform", "scale(1.0)");
     }
 }
