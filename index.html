@@ -7,9 +7,7 @@
         <script src="./jquery-3.6.4.min.js"></script>
         <script src="./bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="./script.js"></script>
-        <!--<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLh1xKvgc3eJDEk7dkv8unU9PejDfy9u0&callback=initMap"></script>-->  <!-- Maps API -->
-        <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLh1xKvgc3eJDEk7dkv8unU9PejDfy9u0&libraries=places&callback=initMap"></script>    <!-- Places API -->
-        <!--<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>-->
+        <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLh1xKvgc3eJDEk7dkv8unU9PejDfy9u0&libraries=places&callback=initMap"></script>   <!-- Places API -->
         <link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" href="./style.css"/>
     </head>
@@ -18,12 +16,30 @@
             <nav class="navbar">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="./index.html">
-                        <h3 id="title">Wanderlust</h3>
+                        <h3 id="title" style="margin: auto 5px auto auto;">Wanderlust</h3>
                     </a>
 
-                    <div class="user-buttons">
+                    <ul style="display: flex; list-style-type: none;">
+                        <li><a class="nav text-decoration-none" href="#" id="search-pill-top">&#128270;</a></li>
+                        <li><a class="nav text-decoration-none" href="#" id="suggestions-pill-top">&#127829;</a></li>
+                    </ul>
+
+                    <div class="user-buttons" style="margin: auto 5px auto auto;">
                         <input type="button" class="btn" value="Registrati" id="signup-button">
                         <input type="button" class="btn" value="Accedi" id="login-button">
+                    </div>
+
+                    <div class="user-profile btn-group" style="margin: auto 5px auto auto">
+                        <input type="file" id="user-pic-input-top" style="display: none;" accept="image/*">
+                        <a href="#" class="dropdown-toggle show text-black text-decoration-none" data-bs-toggle="dropdown">
+                            <img width="40" height="40" class="user-pic">
+                            <strong class="username-placeholder"><!-- Username --></strong>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <a class="dropdown-item" href="#" id="favorites-link-top">Preferiti</a>
+                            <a class="dropdown-item" href="#" id="change-pic-link-top">Cambia immagine</a>
+                            <a class="dropdown-item" href="./forms/logout.php">Esci</a>
+                        </ul>
                     </div>
 
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +70,7 @@
 
             <h5 class="subtitle">SCOPRI</h4>
             <ul>
-                <li><a class="nav text-decoration-none" href="#" id="near-me-pill">&#128205; Vicino a me</a></li>
+                <!--<li><a class="nav text-decoration-none" href="#" id="near-me-pill">&#128205; Vicino a me</a></li>-->
                 <li><a class="nav text-decoration-none" href="#" id="suggestions-pill">&#127829; Suggerimenti</a></li>
             </ul>
 
@@ -66,8 +82,8 @@
             <div class="user-profile btn-group">
                 <input type="file" id="user-pic-input" style="display: none;" accept="image/*">
                 <a href="#" class="dropdown-toggle show text-black text-decoration-none" data-bs-toggle="dropdown">
-                    <img width="40" height="40" id="user-pic">
-                    <strong id="username-placeholder"><!-- Username --></strong>
+                    <img width="40" height="40" class="user-pic">
+                    <strong class="username-placeholder"><!-- Username --></strong>
                 </a>
                 <ul class="dropdown-menu">
                     <a class="dropdown-item" href="#" id="favorites-link">Preferiti</a>
@@ -118,15 +134,6 @@
             Luogo aggiunto alla <strong>lista dei preferiti</strong>.
         </div>
 
-        <div class="search-bar-container">
-            <input type="text" id="search-bar">
-            <input type="submit" role="button" class="btn" value="&#128269;" id="search-button">
-        </div>
-        
-        <div class="map-container">
-            <div id="map">Spazio mappa</div>
-        </div>
-
         <div class="signup-form-container">
             <form action="./forms/signup.php" method="post" id="signup-form" name="signupForm">
                 <button type="button" class="btn-close" aria-label="Chiudi" id="close-signup-form"></button>
@@ -161,18 +168,20 @@
                 <input type="submit" class="btn btn-lg" value="Accedi" id="submit-login-button">
             </form>
         </div>
+
+        <div class="search-bar-container">
+            <input type="text" id="search-bar">
+            <input type="submit" role="button" class="btn" value="&#128269;" id="search-button">
+        </div>
+        
+        <div class="map-container">
+            <div id="map">Spazio mappa</div>
+        </div>
         
         <div class="right-container">
             <div class="search-location-container">
                 <!-- Luoghi che appariranno con "Ricerca luogo" -->
             </div>
-
-            <!-- DA RIFARE -->
-            <!--<div class="near-me-container">-->
-                <!-- <hr/> -->
-                <!--<h1 id="near-me-title">Vicino a me</h1>
-                Luoghi che appariranno con "Vicino a me"
-            </div>-->
 
             <div class="suggestions-container">
                 <!-- Luoghi che appariranno con "Suggerimenti" -->

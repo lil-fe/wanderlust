@@ -13,7 +13,7 @@ $(document).ready(function() {
         $("#user-pic-input").click();
     });
 
-    // gestione caricamento user pic
+    // gestione caricamento user pic lm
     $("#user-pic-input").on("change", function() {
         var imageFile = $(this).prop("files")[0];   // oggetto FileList contenente tutti i file selezionati. con [0] selezioniamo solo il primo file
         var formData = new FormData();  // oggetto per creare coppie chiave-valore da inviare in una richiesta HTTP
@@ -27,7 +27,35 @@ $(document).ready(function() {
             processData: false, // file inviati direttamente senza pre-processarli
             contentType: false,
             success: function(response) {
-                $("#user-pic").attr("src", response);
+                $(".user-pic").attr("src", response);
+                localStorage.setItem("user-pic_" + profileUsername, response);
+            },
+            error: function() {
+                alert("Errore");
+            }
+        });
+    });
+
+    // quanto sopra ma per top menu
+    $("#change-pic-link-top").on("click", function(e) {
+        e.preventDefault();
+        $("#user-pic-input-top").click();
+    });
+
+    $("#user-pic-input-top").on("change", function() {
+        var imageFile = $(this).prop("files")[0];   // oggetto FileList contenente tutti i file selezionati. con [0] selezioniamo solo il primo file
+        var formData = new FormData();  // oggetto per creare coppie chiave-valore da inviare in una richiesta HTTP
+        formData.append("image", imageFile);    // aggiunge una coppia chiave-valore "image"-imageFile
+
+        // Richiesta AJAX per caricare l'immagine
+        $.ajax({
+            url: "./uploadUserPic.php",
+            type: "POST",
+            data: formData,
+            processData: false, // file inviati direttamente senza pre-processarli
+            contentType: false,
+            success: function(response) {
+                $(".user-pic").attr("src", response);
                 localStorage.setItem("user-pic_" + profileUsername, response);
             },
             error: function() {
@@ -60,98 +88,91 @@ $(document).ready(function() {
         closeLoginForm();
     });
 
-    /* Gestione search-bar del left-menu */
+    // Gestione search-bar
     $(".nav").on("click", function() {
         setCurrentPill($(this).attr("id"));
-        toggleSearchBarLM();
+
+        if ($(".left-menu").css("display") != "none") { // desktop
+            toggleSearchBarLM();
+        } else {    // mobile
+            toggleSearchBar();
+        }
     });
 
     $("#search-button").on("click", () => {
-        var searchText = document.getElementById("search-bar").value;
-        // ridimensionamento search-bar e map per far apparire il right container
-        if (!handleEmptySearch(searchText)) {
+        var searchInput = document.getElementById("search-bar");
+        var searchText = searchInput.value;
+        if (handleEmptySearch(searchText)) {
+            showAlert("void-search-alert");
+            return;
+        }
+
+        // ridimensionamento search-bar e map per far apparire il right container (desktop)
+        if ($(".left-menu").css("display") != "none") {
             $("#search-bar").css("width", "480px");
             $("#map").css("max-width", "550px").css("height", "550px");
-            $(".right-container").css("transform", "scale(1.0)");
+            //$(".right-container").css("transform", "scale(1.0)");
             $("#void-search-alert").css("left", "380px");
         }
+        $(".right-container").css("transform", "scale(1.0)");
+        $(".right-container").css("display", "flex");
         
-        if ($("#search-pill").hasClass("current")) { // ricerca luogo
+        if ($("#search-pill").hasClass("current") || $("#search-pill-top").hasClass("current")) { // "Ricerca luogo"
             searchLocation(searchText);
-        } else if ($("#near-me-pill").hasClass("current")) { // vicino a me
-            requestNearMe(pos, searchText);
-        } else if ($("#suggestions-pill").hasClass("current")) { // suggerimenti
-            requestSuggestion(searchText);
-        }        
-    });
+        } else if ($("#suggestions-pill").hasClass("current") || $("#suggestions-pill-top").hasClass("current")) { // "Suggerimenti"
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                        };
+                        map.setCenter(pos);
 
-    /* Gestione search-bar del top-menu */
-    /*$(".search-bar-container").on("click", function() {
-        if (425 < $(window).width() && $(window).width() <= 1024) {
-            $(".search-bar-container").css("top", "110px");
-            $(".search-bar-container").css("max-width", "600px");
-            $(".right-container").css("margin-top", "70px");
-            $("#signup-button").prop("disabled", true);
-            $("#login-button").prop("disabled", true);
-        } else if ($(window).width() <= 425) {
-            $(".search-bar-container").css("max-width", "600px");
-            $("#signup-button").prop("disabled", true);
-            $("#login-button").prop("disabled", true);
-        }
-    });*/
+                        const placesService = new google.maps.places.PlacesService(map);
+                        const request = {
+                            location: pos,
+                            radius: 1500,
+                            keyword: searchText,
+                        };
 
-    /* Chiusura search-bar del top-menu */
-    /*$("body > *").not("body > .search-bar-container").on("click", function() {
-        if ($(".search-bar-container").css("top") == "110px") {
-            if (425 < $(window).width() && $(window).width() <= 1024) {
-                $(".search-bar-container").css("top", "30px");
-                $(".search-bar-container").css("max-width", "55px");
-                $(".right-container").css("margin-top", "0px");
-                $("#signup-button").prop("disabled", false);
-                $("#login-button").prop("disabled", false);
-            } else if ($(window).width() <= 425) {
-                $(".search-bar-container").css("max-width", "55px");
-                $("#signup-button").prop("disabled", false);
-                $("#login-button").prop("disabled", false);
+                        placesService.nearbySearch(request, (results, status) => {
+                            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                                for (let i=0; i < results.length; i++)
+                                    createMarker(results[i]);
+                            }
+                        });
+                    },
+                    () => {
+                        handleLocationError(true, infoWindow, map.getCenter());
+                    }
+                )
+            } else {
+                handleLocationError(false, infoWindow, map.getCenter());
             }
-        }
-    });*/
-
-    /*$("#darkmode-btn").on("click", function() {
-        $("#darkmode-btn").toggleClass("dark");
-        $("#darkmode-btn").toggleClass("light");
-        if ($("#darkmode-btn").hasClass("light")) {
-            $(".darkmode").css("background-color", "white");
-            $("#darkmode-btn").css("background-color", "rgb(110, 110, 110)");
-        } else {
-            $(".darkmode").css("background-color", "rgb(80, 80, 80)");
-            $("#darkmode-btn").css("background-color", "white");
-        }
-    });*/
-
-    // Gestione ridimensionamento finestra (Da rifare)
-    $(window).on("resize", function() {
-        /*if($(".left-menu").css("display") != "none") {  // Desktop
-            $("#search-pill").removeClass("current");
-            $("#near-me-pill").addClass("current");
-            $(".search-bar-container").css("display", "none");
-            $(".right-container").css("margin", "20px 30px 20px 900px");
-        } else {    // Mobile
-            $(".search-bar-container").css("display", "none");
-            $("#map").css("display", "none");
-            $(".right-container").css("margin", "0px 20px 0px 20px");
-            if ($(".signup-form-container").css("display") != "none") {
-                $("#signup-button").css("padding", "10px 60px");
-                $("#login-button").css("padding", "10px 10px");
-            }
-            if ($(".login-form-container").css("display") != "none") {
-                $("#login-button").css("padding", "10px 60px");
-                $("#signup-button").css("padding", "10px 10px");
-            }
-        }*/
+        }     
     });
 });
 
+// top search bar
+function toggleSearchBar() {
+    // se si clicca su un oggetto .nav si apre la barra
+    if ($(".nav").hasClass("current")) {
+        $(".search-bar-container").fadeIn();
+        $(".search-bar-container").css("transform", "scale(1.0)");
+        document.getElementById("search-bar").focus();
+    }
+
+    $("#search-bar").val("");
+    // gestione placeholder
+    if ($("#search-pill-top").hasClass("current")) {
+        $("#search-bar").attr("placeholder", "Dove vuoi andare?");
+    } else if ($("#suggestions-pill-top").hasClass("current")) {
+        $("#search-bar").attr("placeholder", "Cerca luoghi vicino a te basati su una stringa (es: pizza)");
+    }
+}
+
+// lm search bar
 function toggleSearchBarLM() {
     // se si clicca su un oggetto .nav si apre la barra
     if ($(".nav").hasClass("current")) {
@@ -165,12 +186,9 @@ function toggleSearchBarLM() {
     $("#search-bar").val("");
     // gestione placeholder
     if ($("#search-pill").hasClass("current")) {
-        
         $("#search-bar").attr("placeholder", "Dove vuoi andare?");
-    } else if ($("#near-me-pill").hasClass("current")) {
-        $("#search-bar").attr("placeholder", "Cerca luoghi generici vicino a te (es: libreria, discoteca)");
     } else if ($("#suggestions-pill").hasClass("current")) {
-        $("#search-bar").attr("placeholder", "Cerca luoghi sul tema di una stringa (es: pizza)");
+        $("#search-bar").attr("placeholder", "Cerca luoghi vicino a te basati su una stringa (es: pizza)");
     }
 }
 
@@ -235,7 +253,7 @@ function closeSignupForm() {
         $(".signup-form-container").fadeToggle();
         $(".signup-form-container").css("transform", "scale(0.0)");
         $(".subtitle").css("margin-top", "50px");
-        $(".left-menu").css("height", "560px");
+        $(".left-menu").css("height", "500px");
     } else {
         $("#signup-button").css("padding", "10px 20px");
         $("#login-button").css("padding", "10px 30px");
@@ -270,7 +288,7 @@ function toggleSignupFormLM() {
     if ($(".signup-form-container").css("display") == "none" && $(".login-form-container").css("display") == "none") {
         $(".signup-form-container").fadeToggle();
         $(".signup-form-container").css("transform", "scale(1.0)");
-        $(".subtitle").css("margin-top", "20px");
+        $(".subtitle").css("margin-top", "40px");
         $(".left-menu").css("height", "470px");
         document.signupForm.username.focus();
     // signup form aperto -> va chiuso
@@ -278,14 +296,14 @@ function toggleSignupFormLM() {
         $(".signup-form-container").fadeToggle();
         $(".signup-form-container").css("transform", "scale(0.0)");
         $(".subtitle").css("margin-top", "50px");
-        $(".left-menu").css("height", "560px");
+        $(".left-menu").css("height", "500px");
     // login form aperto
     } else if ($(".login-form-container").css("display") == "block") {
         $(".login-form-container").fadeToggle();
         $(".login-form-container").css("transform", "scale(0.0)");
         $(".signup-form-container").fadeToggle();
         $(".signup-form-container").css("transform", "scale(1.0)");
-        $(".subtitle").css("margin-top", "20px");
+        $(".subtitle").css("margin-top", "40px");
         $(".left-menu").css("height", "470px");
         document.signupForm.username.focus();
     }
@@ -312,7 +330,7 @@ function toggleLoginFormLM() {
         $(".login-form-container").fadeToggle();
         $(".login-form-container").css("transform", "scale(1.0)");
         $(".subtitle").css("margin-top", "50px");
-        $(".left-menu").css("height", "560px");
+        $(".left-menu").css("height", "500px");
         document.loginForm.email.focus();
     }
 }
@@ -330,33 +348,55 @@ function checkSignupForm() {
         //alert("L'username deve contenere da 3 a 20 caratteri alfanumerici.");
         showAlert("username-alert");
         usernameInput.focus();
-        setTimeout(function() {
-            $("#username-alert").fadeOut(150);
-            $("#username-alert").css("margin-bottom", "0px");
-            $(".signup-form-container").css("bottom", "20px");
-        }, 3000);
+        if ($(".left-menu").css("display") != "none") { // Desktop
+            setTimeout(function() {
+                $("#username-alert").fadeOut(150);
+                $("#username-alert").css("margin-bottom", "0px");
+                $(".signup-form-container").css("bottom", "20px");
+            }, 3000);
+        } else {    // Mobile
+            setTimeout(function() {
+                $("#username-alert").fadeOut();
+                $("#username-alert").css("transform", "scale(0.0)");
+            }, 3000);
+        }
+        
         return false;
     }
 
     if (emailInput.value == "" || !emailInput.value.match(emailRegex)) {
         showAlert("email-alert");
         emailInput.focus();
-        setTimeout(function() {
-            $("#email-alert").fadeOut(150);
-            $("#email-alert").css("margin-bottom", "0px");
-            $(".signup-form-container").css("bottom", "20px");
-        }, 3000);
+        if ($(".left-menu").css("display") != "none") { // Desktop
+            setTimeout(function() {
+                $("#email-alert").fadeOut(150);
+                $("#email-alert").css("margin-bottom", "0px");
+                $(".signup-form-container").css("bottom", "20px");
+            }, 3000);
+        } else {    // Mobile
+            setTimeout(function() {
+                $("#email-alert").fadeOut();
+                $("#email-alert").css("transform", "scale(0.0)");
+            }, 3000);
+        }
         return false;
     }
 
     if (passwordInput.value == "" || !passwordInput.value.match(passwordRegex)) {
         showAlert("password-alert");
         passwordInput.focus();
-        setTimeout(function() {
-            $("#password-alert").fadeOut(150);
-            $("#password-alert").css("margin-bottom", "0px");
-            $(".signup-form-container").css("bottom", "20px");
-        }, 3000);
+        if ($(".left-menu").css("display") != "none") { // Desktop
+            setTimeout(function() {
+                $("#password-alert").fadeOut(150);
+                $("#password-alert").css("margin-bottom", "0px");
+                $(".signup-form-container").css("bottom", "20px");
+            }, 3000);
+        } else {    // Mobile
+            setTimeout(function() {
+                $("#password-alert").fadeOut();
+                $("#password-alert").css("transform", "scale(0.0)");
+            }, 3000);
+        }
         return false;
     }
 
@@ -380,7 +420,7 @@ function checkLoginStatus() {
                 // Controlla se esiste una user pic associata all'username loggato
                 var savedImageUrl = localStorage.getItem("user-pic_" + profileUsername);
                 if (savedImageUrl)
-                    $("#user-pic").attr("src", savedImageUrl);
+                    $(".user-pic").attr("src", savedImageUrl);
 
                 // Controlla se esiste una lista dei preferiti associata all'username loggato
                 if (!isFavoritesListEmpty()) {
@@ -429,7 +469,7 @@ function checkLoginStatus() {
 }
 
 function showUserProfile(username) {
-    $("#username-placeholder").text(profileUsername);
+    $(".username-placeholder").text(profileUsername);
     $(".user-buttons").hide();
     $(".user-profile").show();
 }
@@ -441,7 +481,7 @@ function showFormButtons() {
 
 
 
-/* -------- Gestione APIs -------- */
+/* -------- Maps -------- */
 let map, infoWindow;
 async function initMap() {
     const { Map } = await google.maps.importLibrary("maps");
@@ -652,64 +692,102 @@ function handleSearchLocation(i, name, venue, markerImg, lat, lng, latLng) {
     map.setCenter(latLng);
 }
 
-// Gestione near me
-/*function requestNearMe(pos, input) {
-    $.ajax({
-        url: `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522%2C151.1957362&radius=1500&type=restaurant&keyword=cruise&key=AIzaSyDLh1xKvgc3eJDEk7dkv8unU9PejDfy9u0`,
-        type: "GET",
-        dataType: "json",
-        success: function(response) {
-            console.log(JSON.stringify(response.data));
-        },
-        error: function(error) {
-            console.log(error);
-        }
+// Gestione della creazione dei marker per "Vicino a me"
+function createMarker(place) {
+    const marker = new google.maps.Marker({
+        position: place.geometry.location,
+        map: map,
+        title: place.name,
     });
-}*/
 
-// Gestione suggerimenti
-function requestSuggestion(input) {
-    //handleEmptySearch(input);
+    // controlla se il posto ha almeno un'immagine da mostrare nella infoWindow
+    let infoWindow;
+    if (place.photos && place.photos.length > 0) {
+        infoWindow = new google.maps.InfoWindow({
+            content: `<div style="text-align: center;">
+                        <h5 style="font-weight: 800;">${place.name}</h3>
+                        <img src="${place.photos[0].getUrl()}" width="150">
+                    </div>`,
+        });
+    } else {
+        infoWindow = new google.maps.InfoWindow({
+            content: `<div style="text-align: center;">
+                        <h5 style="font-weight: 800;">${place.name}</h3>
+                    </div>`,
+        });
+    }
 
-    //...
+    marker.addListener("click", () => {
+        infoWindow.open(map, marker);
+    });
 }
 
 function handleEmptySearch(input) {
     if (input == "") {
         showAlert("void-search-alert");
-        setTimeout(function() {
-            $("#void-search-alert").fadeOut(250);
-            $("#void-search-alert").css("top", "0px");
-            $("#map").css("top", "110px");
-        }, 3000);
+        if ($(".left-menu").css("display") != "none") { // Desktop
+            setTimeout(function() {
+                $("#void-search-alert").fadeOut(250);
+                $("#void-search-alert").css("top", "0px");
+                $("#map").css("top", "110px");
+            }, 3000);
+        } else {    // Mobile
+            setTimeout(function() {
+                $("#void-search-alert").fadeOut();
+                $("#void-search-alert").css("transform", "scale(0.0)");
+            }, 3000);
+        }
         return true;
     }
     return false;
 }
 
 function showAlert(alertId) {
-    if (alertId == "void-search-alert") {
-        $("#void-search-alert").fadeIn(300);
-        $("#void-search-alert").css("top", "110px");
-        $("#map").css("top", "190px");
-    } else if (alertId == "username-alert") {
-        $("#username-alert").fadeIn();
-        $("#username-alert").css("margin-bottom", "20px");
-    } else if (alertId == "email-alert") {
-        $("#email-alert").fadeIn();
-        $("#email-alert").css("margin-bottom", "20px");
-    } else if (alertId == "password-alert") {
-        $("#password-alert").fadeIn();
-        $("#password-alert").css("margin-bottom", "20px");
-    } else if (alertId == "existing-favorite-alert") {
-        $("#existing-favorite-alert").fadeIn(300);
-        $("#existing-favorite-alert").css("top", "110px");
-        $("#map").css("top", "190px");
-    } else if (alertId == "successed-favorite-alert") {
-        $("#successed-favorite-alert").fadeIn(300);
-        $("#successed-favorite-alert").css("top", "110px");
-        $("#map").css("top", "190px");
+    if ($(".left-menu").css("display") != "none") { // Desktop
+        if (alertId == "void-search-alert") {
+            $("#void-search-alert").fadeIn(300);
+            $("#void-search-alert").css("top", "110px");
+            $("#map").css("top", "190px");
+        } else if (alertId == "username-alert") {
+            $("#username-alert").fadeIn();
+            $("#username-alert").css("margin-bottom", "20px");
+        } else if (alertId == "email-alert") {
+            $("#email-alert").fadeIn();
+            $("#email-alert").css("margin-bottom", "20px");
+        } else if (alertId == "password-alert") {
+            $("#password-alert").fadeIn();
+            $("#password-alert").css("margin-bottom", "20px");
+        } else if (alertId == "existing-favorite-alert") {
+            $("#existing-favorite-alert").fadeIn(300);
+            $("#existing-favorite-alert").css("top", "110px");
+            $("#map").css("top", "190px");
+        } else if (alertId == "successed-favorite-alert") {
+            $("#successed-favorite-alert").fadeIn(300);
+            $("#successed-favorite-alert").css("top", "110px");
+            $("#map").css("top", "190px");
+        }
+    } else {    // Mobile
+        if (alertId == "void-search-alert") {
+            $("#void-search-alert").fadeIn(1);
+            $("#void-search-alert").css("transform", "scale(1.0)");
+        } else if (alertId == "username-alert") {
+            $("#username-alert").fadeIn(1);
+            $("#username-alert").css("transform", "scale(1.0)");
+        } else if (alertId == "email-alert") {
+            $("#email-alert").fadeIn(1);
+            $("#email-alert").css("transform", "scale(1.0)");
+        } else if (alertId == "password-alert") {
+            $("#password-alert").fadeIn(1);
+            $("#password-alert").css("transform", "scale(1.0)");
+        } else if (alertId == "existing-favorite-alert") {
+            $("#existing-favorite-alert").fadeIn(1);
+            $("#existing-favorite-alert").css("transform", "scale(1.0)");
+        } else if (alertId == "successed-favorite-alert") {
+            $("#successed-favorite-alert").fadeIn(1);
+            $("#successed-favorite-alert").css("transform", "scale(1.0)");
+        }
     }
+    
 }
 
 
@@ -721,10 +799,18 @@ $(document).ready(() => {
         $("#favorites-placeholder").css("display", "none");
 
     // Click su "Preferiti" dal dropdown menu
-    $("#favorites-link").on("click", () => {
-        $(".left-menu").css("margin-top", "-400px");
+    $("#favorites-link").on("click", () => {    // Desktop
+        $(".left-menu").css("margin-top", "-350px");
         $(".favorites-list").fadeIn(1);
         $(".favorites-list").css("top", "20vh");
+    });
+    $("#favorites-link-top").on("click", () => {    // Mobile
+        $(".top-menu").css("margin-left", "-550px");
+        $(".search-bar-container").css("margin-left", "-550px");
+        $("#map").css("margin-left", "-260px");
+        $(".right-container").css("margin-left", "-260px");
+        $(".favorites-list").fadeIn(1);
+        $(".favorites-list").css("right", "20px");
     });
 
     // click su "Aggiungi ai preferiti" dalla infoWindow
@@ -742,8 +828,16 @@ $(document).ready(() => {
 
     // Click sul bottone per chiudere la lista dei preferiti
     $("#close-favorites-list").on("click", () => {
-        $(".left-menu").css("margin-top", "20px");
-        $(".favorites-list").css("top", "100vh");
+        if ($(".left-menu").css("display") != "none") { // Desktop
+            $(".left-menu").css("margin-top", "20px");
+            $(".favorites-list").css("top", "100vh");
+        } else {    // Mobile
+            $(".top-menu").css("margin-left", "20px");
+            $(".favorites-list").css("right", "-30vh");
+            $(".search-bar-container").css("margin-left", "auto");
+            $("#map").css("margin-left", "auto");
+            $(".right-container").css("margin-left", "auto");
+        }
         $(".favorites-list").fadeOut();
     });
 
@@ -765,21 +859,45 @@ function addFavorite(name, imgUrl, venue, latitude, longitude) {
     }
 
     // Se luogo già presente nei preferiti -> alert rosso e uscita dalla funzione
-    if (isPlaceInFavorites(name, imgUrl)) {
+    if (isPlaceInFavorites(name, imgUrl, venue, latitude, longitude)) {
         showAlert("existing-favorite-alert");
-        setTimeout(function() {
-            $("#existing-favorite-alert").fadeOut(250);
-            $("#existing-favorite-alert").css("top", "0px");
-            $("#map").css("top", "110px");
-        }, 3000);
+        if ($(".left-menu").css("display") != "none") { // Desktop
+            setTimeout(function() {
+                $("#existing-favorite-alert").fadeOut(250);
+                $("#existing-favorite-alert").css("top", "0px");
+                $("#map").css("top", "110px");
+            }, 3000);
+        } else {    // Mobile
+            setTimeout(function() {
+                $("#existing-favorite-alert").fadeOut();
+                $("#existing-favorite-alert").css("transform", "scale(0.0)");
+            }, 3000);
+            if ($(".favorites-list").css("display") != "none") {
+                $("#existing-favorite-alert").css("margin-left", "20px");
+            } else {
+                $("#existing-favorite-alert").css("margin-left", "auto");
+            }
+        }
         return;
     } else {
         showAlert("successed-favorite-alert");
-        setTimeout(function() {
-            $("#successed-favorite-alert").fadeOut(250);
-            $("#successed-favorite-alert").css("top", "0px");
-            $("#map").css("top", "110px");
-        }, 3000);
+        if ($(".left-menu").css("display") != "none") { // Desktop
+            setTimeout(function() {
+                $("#successed-favorite-alert").fadeOut(250);
+                $("#successed-favorite-alert").css("top", "0px");
+                $("#map").css("top", "110px");
+            }, 3000);
+        } else {    // Mobile
+            setTimeout(function() {
+                $("#successed-favorite-alert").fadeOut();
+                $("#successed-favorite-alert").css("transform", "scale(0.0)");
+            }, 3000);
+            if ($(".favorites-list").css("display") != "none") {
+                $("#existing-favorite-alert").css("margin-left", "20px");
+            } else {
+                $("#existing-favorite-alert").css("margin-left", "auto");
+            }
+        }
     }
 
     // Creazione preferito e aggiunta alla lista

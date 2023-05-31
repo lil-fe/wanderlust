@@ -17,13 +17,13 @@
     Il click al singolo suggerimento deve impostare la mappa sull'apposito marker.
 !!! Aggiungere il profilo utente una volta loggato (con possibilità di logout).
 !!! Aggiungere la possibilità di caricare l'immagine di profilo.
->>> Aggiungere i preferiti.
+!!! Aggiungere i preferiti.
     ### Se non si è loggati, cliccando su "aggiungi ai preferiti" si apre il form di login.
     ### Tasto per chiudere la lista dei preferiti.
     ### Tasto per cancellare luogo dalla lista dei preferiti.
     ### Alert rosso nel caso in cui il luogo sia già tra i preferiti, alert verde altrimenti.
-    Cliccando su un preferito viene visualizzato il marker sulla mappa.
->>> Aggiungere Vicino a me e Suggerimenti con Places API.
+    ###Cliccando su un preferito viene visualizzato il marker sulla mappa.
+!!! Aggiungere Suggerimenti con Places API.
 >>> Aggiungere responsività.
 ----------------------------
 
@@ -51,5 +51,6 @@
 !!! (Versione Desktop) Quando uno dei form viene chiuso tramite la X, non viene riattivato l'altro pulsante.
 !!! Impedire l'apertura dei form durante le animazioni degli stessi.
 >>> Il click sulle schede funziona anche nel bianco che dipende dalla dimensione della scheda di maggiore dimensione.
+>>> IL delete favorite buttno non è ben collegato al proprio preferito.
 ---------------------
 
