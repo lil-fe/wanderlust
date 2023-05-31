@@ -7,6 +7,11 @@ $(document).ready(function() {
     // controlla se l'utente è loggato
     checkLoginStatus();
 
+    if ($(window).width() <= 550) {
+        $(".navbar-brand").css("display", "none");
+        $("#mobile-title").css("display", "inline-block");
+    }
+
     // fa in modo che cliccando su "cambia immagine" si clicchi in realtà sull'input per inserire un file
     $("#change-pic-link").on("click", function(e) {
         e.preventDefault();
@@ -198,26 +203,44 @@ function toggleSignupForm() {
     if ($(".signup-form-container, .login-form-container").is(":animated"))
         return false;
 
-    /* form chiusi */
-    if ($("#signup-button").css("padding") == "10px 20px") {
-        $("#signup-button").css("padding", "10px 60px");
-        $("#login-button").css("padding", "10px 10px");
-        $(".signup-form-container").fadeIn();
-        $(".signup-form-container").css("transform", "scale(1.0)");
-    /* form aperto */
-    } else if ($("#signup-button").css("padding") == "10px 60px") {
-        $("#signup-button").css("padding", "10px 20px");
-        $("#login-button").css("padding", "10px 30px");
-        $(".signup-form-container").fadeOut();
-        $(".signup-form-container").css("transform", "scale(0.0)");
-    } else {    // login form aperto
-        $("#signup-button").css("padding", "10px 60px");
-        $("#login-button").css("padding", "10px 10px");
-        $(".login-form-container").fadeOut(1);
-        $(".login-form-container").css("transform", "scale(0.0)");
-        $(".signup-form-container").fadeIn();
-        $(".signup-form-container").css("transform", "scale(1.0)");
+    if ($(window).width() > 700) {
+        // form chiusi
+        if ($("#signup-button").css("padding") == "10px 20px") {
+            $("#signup-button").css("padding", "10px 60px");
+            $("#login-button").css("padding", "10px 10px");
+            $(".signup-form-container").fadeIn();
+            $(".signup-form-container").css("transform", "scale(1.0)");
+        // form aperto
+        } else if ($("#signup-button").css("padding") == "10px 60px") {
+            $("#signup-button").css("padding", "10px 20px");
+            $("#login-button").css("padding", "10px 30px");
+            $(".signup-form-container").fadeOut();
+            $(".signup-form-container").css("transform", "scale(0.0)");
+        } else {    // login form aperto
+            $("#signup-button").css("padding", "10px 60px");
+            $("#login-button").css("padding", "10px 10px");
+            $(".login-form-container").fadeOut(1);
+            $(".login-form-container").css("transform", "scale(0.0)");
+            $(".signup-form-container").fadeIn();
+            $(".signup-form-container").css("transform", "scale(1.0)");
+        }
+    } else {
+        // form chiusi
+        if ($(".signup-form-container").css("display") == "none" && $(".login-form-container").css("display") == "none") {
+            $(".signup-form-container").fadeIn();
+            $(".signup-form-container").css("transform", "scale(1.0)");
+        // signup form aperto
+        } else if ($(".signup-form-container").css("display") != "none") {
+            $(".signup-form-container").fadeOut();
+            $(".signup-form-container").css("transform", "scale(0.0)");
+        } else {    // login form aperto
+            $(".login-form-container").fadeOut(1);
+            $(".login-form-container").css("transform", "scale(0.0)");
+            $(".signup-form-container").fadeIn();
+            $(".signup-form-container").css("transform", "scale(1.0)");
+        }
     }
+    
 }
 
 /* Apre il form di accesso */
@@ -226,25 +249,42 @@ function toggleLoginForm() {
     if ($(".signup-form-container, .login-form-container").is(":animated"))
         return false;
 
-    /* form chiusi */
-    if ($("#login-button").css("padding") == "10px 30px") {
-        $("#login-button").css("padding", "10px 60px");
-        $("#signup-button").css("padding", "10px 10px");
-        $(".login-form-container").fadeIn();
-        $(".login-form-container").css("transform", "scale(1.0)");
-    /* login form aperto */
-    } else if ($("#login-button").css("padding") == "10px 60px") {
-        $("#login-button").css("padding", "10px 30px");
-        $("#signup-button").css("padding", "10px 20px");
-        $(".login-form-container").fadeOut();
-        $(".login-form-container").css("transform", "scale(0.0)");
-    } else {    // signup form aperto
-        $("#login-button").css("padding", "10px 60px");
-        $("#signup-button").css("padding", "10px 10px");
-        $(".signup-form-container").fadeOut(1);
-        $(".signup-form-container").css("transform", "scale(0.0)");
-        $(".login-form-container").fadeIn();
-        $(".login-form-container").css("transform", "scale(1.0)");
+    if ($(window).width() > 700) {
+        // form chiusi
+        if ($("#login-button").css("padding") == "10px 30px") {
+            $("#login-button").css("padding", "10px 60px");
+            $("#signup-button").css("padding", "10px 10px");
+            $(".login-form-container").fadeIn();
+            $(".login-form-container").css("transform", "scale(1.0)");
+        // login form aperto
+        } else if ($("#login-button").css("padding") == "10px 60px") {
+            $("#login-button").css("padding", "10px 30px");
+            $("#signup-button").css("padding", "10px 20px");
+            $(".login-form-container").fadeOut();
+            $(".login-form-container").css("transform", "scale(0.0)");
+        } else {    // signup form aperto
+            $("#login-button").css("padding", "10px 60px");
+            $("#signup-button").css("padding", "10px 10px");
+            $(".signup-form-container").fadeOut(1);
+            $(".signup-form-container").css("transform", "scale(0.0)");
+            $(".login-form-container").fadeIn();
+            $(".login-form-container").css("transform", "scale(1.0)");
+        }
+    } else {
+        // form chiusi
+        if ($(".login-form-container").css("display") == "none" && $(".signup-form-container").css("display") == "none") {
+            $(".login-form-container").fadeIn();
+            $(".login-form-container").css("transform", "scale(1.0)");
+        // login form aperto
+        } else if ($(".login-form-container").css("display") != "none") {
+            $(".login-form-container").fadeOut();
+            $(".login-form-container").css("transform", "scale(0.0)");
+        } else {    // signup form aperto
+            $(".signup-form-container").fadeOut(1);
+            $(".signup-form-container").css("transform", "scale(0.0)");
+            $(".login-form-container").fadeIn();
+            $(".login-form-container").css("transform", "scale(1.0)");
+        }
     }
 }
 
@@ -255,20 +295,24 @@ function closeSignupForm() {
         $(".subtitle").css("margin-top", "50px");
         $(".left-menu").css("height", "500px");
     } else {
-        $("#signup-button").css("padding", "10px 20px");
-        $("#login-button").css("padding", "10px 30px");
+        if ($(window).width() > 700) {
+            $("#signup-button").css("padding", "10px 20px");
+            $("#login-button").css("padding", "10px 30px");
+        }
         $(".signup-form-container").fadeToggle();
         $(".signup-form-container").css("transform", "scale(0.0)");
     }
 }
 
 function closeLoginForm() {
-    if ($(".left-menu").css("display") == "flex") {
+    if ($(".left-menu").css("display") != "none") {
         $(".login-form-container").fadeToggle();
         $(".login-form-container").css("transform", "scale(0.0)");
     } else {
-        $("#login-button").css("padding", "10px 30px");
-        $("#signup-button").css("padding", "10px 20px");
+        if ($(window).width() > 700) {
+            $("#login-button").css("padding", "10px 30px");
+            $("#signup-button").css("padding", "10px 20px");
+        }
         $(".login-form-container").fadeToggle();
         $(".login-form-container").css("transform", "scale(0.0)");
     }
@@ -495,7 +539,7 @@ async function initMap() {
     const locationButton = document.createElement("button");
     locationButton.textContent = "Posizione corrente";
     locationButton.classList.add("custom-map-control-button");
-    map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+    map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(locationButton);
     locationButton.addEventListener("click", () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -811,6 +855,9 @@ $(document).ready(() => {
         $(".right-container").css("margin-left", "-260px");
         $(".favorites-list").fadeIn(1);
         $(".favorites-list").css("right", "20px");
+        if ($(window).width() <= 550) {
+            $(".favorites-list").css("top", "70px");
+        }
     });
 
     // click su "Aggiungi ai preferiti" dalla infoWindow
